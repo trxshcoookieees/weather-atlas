@@ -1,7 +1,7 @@
 "use client";
 
 import type { HourlyWeather } from "@/lib/weather/types";
-import type { WeatherIconName } from "@/components/weather/meteocons";
+import type { WeatherIconName } from "@/components/weather";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -12,7 +12,7 @@ import {
   Area,
   Tooltip,
 } from "recharts";
-import { WeatherChartTooltip } from "@/components/weather/weather-chart-tooltip";
+import { WeatherChartTooltip } from "@/components/weather";
 import { parseWeatherDateTime, formatTemperature } from "@/lib/formatters";
 import { getWeatherIconName } from "@/lib/weather/weather-codes";
 

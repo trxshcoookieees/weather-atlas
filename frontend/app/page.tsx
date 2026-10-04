@@ -81,7 +81,7 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
             <WeatherIcon
               name={getWeatherIconName(current.weatherCode, current.isDay)}
               alt="Partly Cloudy Day"
-              size={128}
+              size={200}
               variant={"animated"}
             />
           </div>
@@ -204,7 +204,6 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                       <WeatherIcon
                         name={getWeatherIconName(item.weatherCode, item.isDay)}
                         alt="Partly cloudy day"
-                        size={48}
                       />
                     </div>
                     <div className="flex justify-between">
@@ -262,7 +261,6 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                     </div>
                     <WeatherIcon
                       name={getWeatherIconName(item.weatherCode, current.isDay)}
-                      size={42}
                     />
                     <span className="ml-12 text-sm text-slate-600">
                       Brief description of weather. TODO!!!
