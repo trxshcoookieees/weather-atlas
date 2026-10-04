@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "recharts";
 import { WeatherChartTooltip } from "@/components/weather/weather-chart-tooltip";
-import { parseWeatherDateTime } from "@/lib/formatters";
+import { parseWeatherDateTime, formatTemperature } from "@/lib/formatters";
 import { getWeatherIconName } from "@/lib/weather/weather-codes";
 
 export type HourlyChartPoint = {
@@ -26,9 +26,10 @@ export type HourlyChartPoint = {
 type WeatherChartProps = {
   data: HourlyWeather[];
   timezone: string;
+  unit: "C" | "F";
 };
 
-export function WeatherChart({ data, timezone }: WeatherChartProps) {
+export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
   const temperatures = data.map((h) => h.temperature);
   let minTemperature = Math.min(...temperatures);
   let maxTemperature = Math.max(...temperatures);
@@ -86,11 +87,11 @@ export function WeatherChart({ data, timezone }: WeatherChartProps) {
               fill: "#62748e",
               fontSize: 10,
             }}
-            tickFormatter={(value) => `${value}°`}
+            tickFormatter={(value) => formatTemperature(value, unit)}
             allowDecimals={false}
           />
           <Tooltip
-            content={<WeatherChartTooltip />}
+            content={<WeatherChartTooltip unit={unit} />}
             cursor={{ stroke: "#62748e", strokeDasharray: "3 3" }}
           />
           <Area

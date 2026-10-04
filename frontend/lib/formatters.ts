@@ -99,3 +99,17 @@ export function parseWeatherDateTime(
     label: `${datePart} · ${time} ${timezonePart}`,
   };
 }
+
+export function formatTemperature(
+  value: number,
+  unit: "C" | "F" = "C",
+): string {
+  const celsius = value;
+  const fahrenheit = (celsius * 9) / 5 + 32;
+  const displayValue = unit === "F" ? fahrenheit : celsius;
+  return `${Math.round(displayValue)}°`;
+}
+
+// const convertTemperature = (celsius: number): number => {
+//   return unit === "F" ? (celsius * 9) / 5 + 32 : celsius;
+// };

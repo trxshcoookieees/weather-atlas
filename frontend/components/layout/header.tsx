@@ -1,5 +1,4 @@
-"use client";
-
+import { Suspense } from "react";
 import { Search } from "lucide-react";
 import { TemperatureUnitSwitch } from "@/components/weather";
 import { Icon } from "@/components/ui";
@@ -35,7 +34,9 @@ export function Header() {
             <p>(2m ago)</p>
           </div>
         </div>
-        <TemperatureUnitSwitch />
+        <Suspense fallback={<div className="h-10 w-18 surface" />}>
+          <TemperatureUnitSwitch />
+        </Suspense>
         {/*  TODO: Profile pic along with profile itself */}
       </div>
     </header>

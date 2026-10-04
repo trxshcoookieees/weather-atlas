@@ -1,8 +1,19 @@
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useTemperatureUnit } from "@/components/providers";
 
 export function TemperatureUnitSwitch() {
-  const { unit, setUnit } = useTemperatureUnit();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const currentUnit = searchParams.get("unit") === "F" ? "F" : "C";
+
+  const setUnit = (unit: "C" | "F") => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("unit", unit);
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <div
@@ -14,7 +25,7 @@ export function TemperatureUnitSwitch() {
         className={cn(
           "absolute top-0.75 left-0.75 size-8 rounded-md bg-cyan-600/20 shadow-sm",
           "transition-transform duration-200 ease-out",
-          unit === "F" && "translate-x-8",
+          currentUnit === "F" && "translate-x-8",
         )}
       />
 
@@ -23,9 +34,9 @@ export function TemperatureUnitSwitch() {
         onClick={() => setUnit("C")}
         className={cn(
           "relative z-10 w-1/2 cursor-pointer text-xs font-semibold transition-colors duration-200",
-          unit === "C" ? "text-cyan-900" : "text-slate-600",
+          currentUnit === "C" ? "text-cyan-900" : "text-slate-600",
         )}
-        aria-pressed={unit === "C"}
+        aria-pressed={currentUnit === "C"}
       >
         °C
       </button>
@@ -34,9 +45,9 @@ export function TemperatureUnitSwitch() {
         onClick={() => setUnit("F")}
         className={cn(
           "relative z-10 w-1/2 cursor-pointer text-xs font-semibold transition-colors duration-200",
-          unit === "F" ? "text-cyan-900" : "text-slate-600",
+          currentUnit === "F" ? "text-cyan-900" : "text-slate-600",
         )}
-        aria-pressed={unit === "F"}
+        aria-pressed={currentUnit === "F"}
       >
         °F
       </button>

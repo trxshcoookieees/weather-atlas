@@ -1,5 +1,6 @@
 import { HourlyChartPoint } from "@/components/weather/weather-chart";
 import { WeatherIcon } from "@/components/weather/weather-icon";
+import { formatTemperature } from "@/lib/formatters";
 
 export type WeatherTooltipPayload = {
   dataKey: string;
@@ -11,12 +12,14 @@ export type ChartTooltipProps = {
   active?: boolean;
   payload?: WeatherTooltipPayload[];
   label?: string;
+  unit: "C" | "F";
 };
 
 export function WeatherChartTooltip({
   active,
   payload,
   label,
+  unit,
 }: ChartTooltipProps) {
   if (!active || !payload?.length) return null;
 
@@ -35,9 +38,11 @@ export function WeatherChartTooltip({
           className="shrink-0"
         />
         <div>
-          <p className="font-semibold text-cyan-900">{point.temperature}°</p>
+          <p className="font-semibold text-cyan-900">
+            {formatTemperature(point.temperature, unit)}
+          </p>
           <p className="text-xs text-slate-600">
-            feels {point.apparentTemperature}°
+            feels {formatTemperature(point.apparentTemperature, unit)}
           </p>
         </div>
       </div>

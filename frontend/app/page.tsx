@@ -13,21 +13,29 @@ import { Badge, Icon } from "@/components/ui";
 import { compassPoint } from "@/lib/utils";
 import { WeatherChart, WeatherIcon } from "@/components/weather";
 import { getWeatherForecast } from "@/lib/weather/api";
-import { parseWeatherDateTime, parseWeatherDay } from "@/lib/formatters";
+import {
+  formatTemperature,
+  parseWeatherDateTime,
+  parseWeatherDay,
+} from "@/lib/formatters";
 import { getWeatherIconName } from "@/lib/weather/weather-codes";
 import WeatherRefresh from "@/components/weather/WeatherRefresh";
 
-export default async function Overview() {
+export default async function Overview({ searchParams }: PageProps<"/">) {
   const { location, current, hourly, daily } = await getWeatherForecast(
     Number(56.1210898),
     Number(92.9360696),
   );
+
+  const unit = (await searchParams).unit === "F" ? "F" : "C";
 
   const currentHour = Number(
     parseWeatherDateTime(current.time, location.timezone).hours,
   );
 
   const todayKey = parseWeatherDay(current.time, location.timezone).key;
+
+  const today = daily?.[0];
 
   return (
     <WeatherRefresh>
@@ -56,9 +64,14 @@ export default async function Overview() {
               <Badge variant="pillMuted" icon={CloudSun}>
                 <span className={"text-xs font-semibold"}>Partly cloudy</span>
               </Badge>
-              <p className="medium text-7xl">{current.temperature}°</p>
+              <p className="medium text-7xl">
+                {formatTemperature(current.temperature, unit)}
+              </p>
               <p className="text-slate-600">
-                Feels like {current.apparentTemperature}° · High 16° / Low 9°
+                Feels like{" "}
+                {formatTemperature(current.apparentTemperature, unit)} · High{" "}
+                {formatTemperature(today?.maxTemperature ?? 0, unit)} / Low{" "}
+                {formatTemperature(today?.minTemperature ?? 0, unit)}
               </p>
               <p className="max-w-3/5 text-slate-600">
                 A fresh, bright afternoon with clouds breaking from the west. A
@@ -80,7 +93,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {daily[0].humidity}%
+                  {today?.humidity ?? 0}%
                 </span>
                 <span className="text-xs text-slate-500">Comfortable</span>
               </div>
@@ -92,7 +105,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {daily[0].windSpeed} m/s
+                  {today?.windSpeed ?? 0} m/s
                 </span>
                 <span className="text-xs text-slate-500">SW · 224°</span>
               </div>
@@ -104,7 +117,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {daily[0].avgPressureMsl} hPa
+                  {today?.avgPressureMsl ?? 0} hPa
                 </span>
                 <span className="text-xs text-slate-500">Steady</span>
               </div>
@@ -116,7 +129,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {Math.round(daily[0].visibility / 1000)} km
+                  {Math.round((today?.visibility ?? 0) / 1000)} km
                 </span>
                 <span className="text-xs text-slate-500">Excellent</span>
               </div>
@@ -128,7 +141,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {daily[0].uvIndex} Low
+                  {today?.uvIndex ?? 0} Low
                 </span>
                 <span className="text-xs text-slate-500">Protection 30m</span>
               </div>
@@ -140,7 +153,7 @@ export default async function Overview() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {daily[0].precipitation} mm
+                  {today?.precipitation ?? 0} mm
                 </span>
                 <span className="text-xs text-slate-500">Past hour</span>
               </div>
@@ -185,7 +198,7 @@ export default async function Overview() {
                           }
                         </p>
                         <p className="mt-2 text-2xl font-semibold">
-                          {item.temperature}°
+                          {formatTemperature(item.temperature, unit)}
                         </p>
                       </div>
                       <WeatherIcon
@@ -224,6 +237,7 @@ export default async function Overview() {
               <WeatherChart
                 data={hourly.slice(currentHour + 1, currentHour + 25)}
                 timezone={location.timezone}
+                unit={unit}
               />
             ) : (
               <span className="text-4xl font-semibold">No Data :(</span>
@@ -235,7 +249,7 @@ export default async function Overview() {
               <p className="text-sm text-slate-600">Next week</p>
             </div>
             <div className="h-64 scrollbar-thin divide-y-2 divide-slate-600/20 overflow-y-scroll">
-              {daily?.slice(0, 7).map((item, i) => {
+              {daily?.slice(0, 7).map((item) => {
                 const day = parseWeatherDay(item.time, location.timezone);
                 const isToday = day.key == todayKey;
                 return (
@@ -258,10 +272,10 @@ export default async function Overview() {
                       <span>{item.humidity}%</span>
                     </div>
                     <span className="w-10 text-center text-sm text-slate-600">
-                      {item.minApparentTemperature}°
+                      {formatTemperature(item.minApparentTemperature, unit)}
                     </span>
                     <span className="w-10 text-center font-semibold">
-                      {item.maxApparentTemperature}°
+                      {formatTemperature(item.maxApparentTemperature, unit)}
                     </span>
                   </div>
                 );
