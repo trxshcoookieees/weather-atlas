@@ -28,16 +28,16 @@ export function WeatherChartTooltip({
   if (!point) return null;
 
   return (
-    <div className="space-y-2 surface px-3.5 py-2.5 shadow-sm">
-      <p className="text-center text-xs text-slate-600">{label} · Today</p>
+    <div className="surface px-2.5 py-1.5 shadow-sm">
+      <p className="text-center text-xs text-slate-600">{label}</p>
       <div className="flex w-full items-center justify-center gap-4">
         <WeatherIcon name={point.weather} alt="" size={40} />
         <div>
           <p className="font-semibold text-cyan-900">
-            {formatTemperature(point.temperature, unit)}
+            {formatTemperature(point.temperature, unit).display}
           </p>
           <p className="text-xs text-slate-600">
-            feels {formatTemperature(point.apparentTemperature, unit)}
+            feels {formatTemperature(point.apparentTemperature, unit).display}
           </p>
         </div>
       </div>

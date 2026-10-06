@@ -61,29 +61,33 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
         <section className="flex min-h-75 gap-5">
           <div className="flex w-2/3 items-center justify-between surface rounded-4xl p-7 pr-32">
             <div className={"h-full space-y-3"}>
-              <Badge variant="pillMuted" icon={CloudSun}>
-                <span className={"text-xs font-semibold"}>Partly cloudy</span>
-              </Badge>
               <p className="medium text-7xl">
-                {formatTemperature(current.temperature, unit)}
+                {formatTemperature(current.temperature, unit).display}
               </p>
               <p className="text-slate-600">
                 Feels like{" "}
-                {formatTemperature(current.apparentTemperature, unit)} · High{" "}
-                {formatTemperature(today?.maxTemperature ?? 0, unit)} / Low{" "}
-                {formatTemperature(today?.minTemperature ?? 0, unit)}
+                {formatTemperature(current.apparentTemperature, unit).display} ·
+                High{" "}
+                {formatTemperature(today?.maxTemperature ?? 0, unit).display} /
+                Low{" "}
+                {formatTemperature(today?.minTemperature ?? 0, unit).display}
               </p>
               <p className="max-w-3/5 text-slate-600">
                 A fresh, bright afternoon with clouds breaking from the west. A
                 brief shower is possible around 17:00.
               </p>
             </div>
-            <WeatherIcon
-              name={getWeatherIconName(current.weatherCode, current.isDay)}
-              alt="Partly Cloudy Day"
-              size={200}
-              variant={"animated"}
-            />
+            <div className="space-y-2">
+              <WeatherIcon
+                name={getWeatherIconName(current.weatherCode, current.isDay)}
+                alt="Partly Cloudy Day"
+                size={200}
+                variant={"animated"}
+              />
+              <Badge variant="pillMuted" className="mx-auto">
+                <span className={"text-xs font-semibold"}>Partly cloudy</span>
+              </Badge>
+            </div>
           </div>
           <div className="grid w-1/3 grid-cols-2 grid-rows-3 gap-3">
             <div className="space-y-2.5 surface rounded-2xl p-4">
@@ -198,7 +202,7 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                           }
                         </p>
                         <p className="mt-2 text-2xl font-semibold">
-                          {formatTemperature(item.temperature, unit)}
+                          {formatTemperature(item.temperature, unit).display}
                         </p>
                       </div>
                       <WeatherIcon
@@ -270,10 +274,16 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                       <span>{item.humidity}%</span>
                     </div>
                     <span className="w-10 text-center text-sm text-slate-600">
-                      {formatTemperature(item.minApparentTemperature, unit)}
+                      {
+                        formatTemperature(item.minApparentTemperature, unit)
+                          .display
+                      }
                     </span>
                     <span className="w-10 text-center font-semibold">
-                      {formatTemperature(item.maxApparentTemperature, unit)}
+                      {
+                        formatTemperature(item.maxApparentTemperature, unit)
+                          .display
+                      }
                     </span>
                   </div>
                 );

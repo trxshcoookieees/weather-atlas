@@ -40,7 +40,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
   const clampedMax = Math.max(maxTemperature, minTemperature + 2);
 
   const points = data.map((h) => ({
-    time: parseWeatherDateTime(h.time, timezone).time,
+    time: parseWeatherDateTime(h.time, timezone),
     temperature: h.temperature,
     apparentTemperature: h.apparentTemperature,
     weather: getWeatherIconName(h.weatherCode, h.isDay),
@@ -68,7 +68,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
             strokeDasharray="3 3"
           />
           <XAxis
-            dataKey="time"
+            dataKey="time.time"
             interval={2}
             axisLine={false}
             tickLine={false}
@@ -87,7 +87,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
               fill: "#62748e",
               fontSize: 10,
             }}
-            tickFormatter={(value) => formatTemperature(value, unit)}
+            tickFormatter={(value) => formatTemperature(value, unit).display}
             allowDecimals={false}
           />
           <Tooltip
