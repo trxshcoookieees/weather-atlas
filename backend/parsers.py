@@ -63,10 +63,15 @@ def parse_hourly(data: VariablesWithTime, timezone: ZoneInfo) -> list[HourlyWeat
 
 
 def parse_daily(data: VariablesWithTime, timezone: ZoneInfo) -> list[DailyWeather]:
-    weather_codes, max_temperatures, min_temperatures, max_apparent_temperatures, min_apparent_temperatures, precipitation_probabilities, precipitations, humidities, cloud_covers, avg_pressures_msl, max_pressures_msl, min_pressures_msl, wind_directions, wind_speeds, wind_gusts, uv_indexes, sunrises, sunsets, moon_phases, moon_rises, moon_sets, daylight_durations, sunlight_durations, visibilities = (
+    weather_codes, max_temperatures, min_temperatures, max_apparent_temperatures, min_apparent_temperatures, precipitation_probabilities, precipitations, humidities, cloud_covers, avg_pressures_msl, max_pressures_msl, min_pressures_msl, wind_directions, wind_speeds, wind_gusts, uv_indexes, moon_phases, daylight_durations, sunlight_durations, visibilities = (
         values(data, i)
-        for i in range(24)
+        for i in range(20)
     )
+
+    sunrises = int64_values(data, 20)
+    sunsets = int64_values(data, 21)
+    moon_rises = int64_values(data, 22)
+    moon_sets = int64_values(data, 23)
 
     return [
         DailyWeather(
