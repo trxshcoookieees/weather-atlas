@@ -67,9 +67,22 @@ export type DailyWeather = {
   visibility: number;
 };
 
+export type APIResponse = {
+  location: Location;
+  current: CurrentWeather;
+  hourly: HourlyWeather[];
+  daily: DailyWeather[];
+};
+
 export type WeatherResponse = {
   location: Location;
   current: CurrentWeather;
-  hourly: HourlyWeather[] | null;
-  daily: DailyWeather[] | null;
+  hourly: HourlyWeather[];
+  daily: DailyWeather[];
+  previousDay: {
+    hourly: HourlyWeather[];
+    daily: DailyWeather;
+  };
+  pressureDelta: number;
+  precipitationDelta: number;
 };

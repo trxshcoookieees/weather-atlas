@@ -83,7 +83,8 @@ def fetch_weather(latitude: float, longitude: float):
             "is_day",
         ],
         "wind_speed_unit": "ms",
-        "timezone": "auto"
+        "timezone": "auto",
+        "past_days": 1
     }
 
     return openmeteo.weather_api(
