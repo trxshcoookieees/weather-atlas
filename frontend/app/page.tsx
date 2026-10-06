@@ -20,22 +20,36 @@ import {
 } from "@/lib/formatters";
 import { getWeatherIconName } from "@/lib/weather/weather-codes";
 import WeatherRefresh from "@/components/weather/WeatherRefresh";
+import {
+  getHumidityLabel,
+  getPressureLabel,
+  getUVILabel,
+  getVisibilityLabel,
+  getWeatherLabel,
+} from "@/lib/weather/weather-descriptions";
 
 export default async function Overview({ searchParams }: PageProps<"/">) {
-  const { location, current, hourly, daily } = await getWeatherForecast(
-    Number(56.1210898),
-    Number(92.9360696),
-  );
+  const {
+    location,
+    current,
+    hourly,
+    daily,
+    previousDay,
+    pressureDelta,
+    precipitationDelta,
+  } = await getWeatherForecast(Number(56.1210898), Number(92.9360696));
 
   const unit = (await searchParams).unit === "F" ? "F" : "C";
+
+  const todayKey = parseWeatherDay(current.time, location.timezone).key;
+  const today = daily[0];
 
   const currentHour = Number(
     parseWeatherDateTime(current.time, location.timezone).hours,
   );
+  const currentHourIndex = 24 + currentHour;
 
-  const todayKey = parseWeatherDay(current.time, location.timezone).key;
-
-  const today = daily?.[0];
+  const currentVisibility = Math.round((today?.visibility ?? 0) / 1000);
 
   return (
     <WeatherRefresh>
@@ -85,7 +99,9 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                 variant={"animated"}
               />
               <Badge variant="pillMuted" className="mx-auto">
-                <span className={"text-xs font-semibold"}>Partly cloudy</span>
+                <span className={"text-xs font-semibold"}>
+                  {getWeatherLabel(current.weatherCode)}
+                </span>
               </Badge>
             </div>
           </div>
@@ -97,9 +113,11 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {today?.humidity ?? 0}%
+                  {current?.humidity ?? 0}%
                 </span>
-                <span className="text-xs text-slate-500">Comfortable</span>
+                <span className="text-xs text-slate-500">
+                  {getHumidityLabel(current.humidity)}
+                </span>
               </div>
             </div>
             <div className="space-y-2.5 surface rounded-xl p-4">
@@ -109,9 +127,13 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {today?.windSpeed ?? 0} m/s
+                  {current?.windSpeed ?? 0} m/s
                 </span>
-                <span className="text-xs text-slate-500">SW · 224°</span>
+                <span className="text-xs text-slate-500">
+                  {compassPoint(current.windDirection)}
+                  {" · "}
+                  {current.windDirection}°
+                </span>
               </div>
             </div>
             <div className="space-y-2.5 surface rounded-xl p-4">
@@ -123,7 +145,9 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                 <span className="mr-auto text-xl font-semibold">
                   {today?.avgPressureMsl ?? 0} hPa
                 </span>
-                <span className="text-xs text-slate-500">Steady</span>
+                <span className="text-xs text-slate-500">
+                  {getPressureLabel(pressureDelta)}
+                </span>
               </div>
             </div>
             <div className="space-y-2.5 surface rounded-xl p-4">
@@ -133,9 +157,11 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {Math.round((today?.visibility ?? 0) / 1000)} km
+                  {currentVisibility} km
                 </span>
-                <span className="text-xs text-slate-500">Excellent</span>
+                <span className="text-xs text-slate-500">
+                  {getVisibilityLabel(currentVisibility)}
+                </span>
               </div>
             </div>
             <div className="space-y-2.5 surface rounded-xl p-4">
@@ -145,9 +171,9 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {today?.uvIndex ?? 0} Low
+                  {getUVILabel(hourly[currentHourIndex]?.uvIndex)}
                 </span>
-                <span className="text-xs text-slate-500">Protection 30m</span>
+                {/*<span className="text-xs text-slate-500">Protection 30m</span>*/}
               </div>
             </div>
             <div className="space-y-2.5 surface rounded-xl p-4">
@@ -157,7 +183,7 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="mr-auto text-xl font-semibold">
-                  {today?.precipitation ?? 0} mm
+                  {precipitationDelta} mm
                 </span>
                 <span className="text-xs text-slate-500">Past hour</span>
               </div>
@@ -267,7 +293,7 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
                       name={getWeatherIconName(item.weatherCode, current.isDay)}
                     />
                     <span className="ml-12 text-sm text-slate-600">
-                      Brief description of weather. TODO!!!
+                      {getWeatherLabel(item.weatherCode)}
                     </span>
                     <div className="mr-6 ml-auto inline-flex items-center gap-1 text-sm text-blue-400">
                       <Icon icon={Droplets} className="size-3" />
