@@ -17,13 +17,13 @@ export function TemperatureUnitSwitch() {
 
   return (
     <div
-      className="relative flex h-10 w-18 surface p-1"
+      className="surface relative flex h-10 w-18 rounded-lg"
       role="group"
       aria-label="Temperature unit"
     >
       <div
         className={cn(
-          "absolute top-0.75 left-0.75 size-8 rounded-md bg-cyan-600/20 shadow-sm",
+          "surface absolute top-1 left-1 size-8 rounded-md",
           "transition-transform duration-200 ease-out",
           currentUnit === "F" && "translate-x-8",
         )}
@@ -34,7 +34,7 @@ export function TemperatureUnitSwitch() {
         onClick={() => setUnit("C")}
         className={cn(
           "relative z-10 w-1/2 cursor-pointer text-xs font-semibold transition-colors duration-200",
-          currentUnit === "C" ? "text-cyan-900" : "text-slate-600",
+          currentUnit === "C" ? "" : "text-neutral-600 dark:text-neutral-300",
         )}
         aria-pressed={currentUnit === "C"}
       >
@@ -45,7 +45,7 @@ export function TemperatureUnitSwitch() {
         onClick={() => setUnit("F")}
         className={cn(
           "relative z-10 w-1/2 cursor-pointer text-xs font-semibold transition-colors duration-200",
-          currentUnit === "F" ? "text-cyan-900" : "text-slate-600",
+          currentUnit === "F" ? "" : "text-neutral-600 dark:text-neutral-300",
         )}
         aria-pressed={currentUnit === "F"}
       >

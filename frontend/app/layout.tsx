@@ -18,9 +18,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${jakarta.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="flex min-h-screen">
+      <body className="flex h-full overflow-hidden bg-linear-to-br from-stone-200 from-20% via-stone-300 to-zinc-300 font-sans text-neutral-800 dark:from-gray-600 dark:via-gray-500 dark:to-gray-400 dark:text-neutral-200">
         <Sidebar />
-        <main className="mx-auto w-full">
+        <main className="relative mx-auto flex h-full w-full min-w-0 flex-1 flex-col overflow-y-auto">
           <Header />
           {children}
         </main>

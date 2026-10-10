@@ -58,8 +58,21 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
               x2="0"
               y2="1"
             >
-              <stop offset="5%" stopColor="#007595" stopOpacity={0.38} />
-              <stop offset="90%" stopColor="#007595" stopOpacity={0.05} />
+              <stop
+                offset="5%"
+                stopColor={"var(--chart-accent)"}
+                stopOpacity={0.5}
+              />
+              <stop
+                offset="50%"
+                stopColor={"var(--chart-accent)"}
+                stopOpacity={0.3}
+              />
+              <stop
+                offset="90%"
+                stopColor={"var(--chart-accent)"}
+                stopOpacity={0.1}
+              />
             </linearGradient>
           </defs>
           <CartesianGrid
@@ -73,7 +86,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
             axisLine={false}
             tickLine={false}
             tick={{
-              fill: "#62748e",
+              fill: "var(--chart-base)",
               fontSize: 10,
             }}
           />
@@ -84,7 +97,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
             tickLine={false}
             width={20}
             tick={{
-              fill: "#62748e",
+              fill: "var(--chart-base)",
               fontSize: 10,
             }}
             tickFormatter={(value) => formatTemperature(value, unit).display}
@@ -92,7 +105,7 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
           />
           <Tooltip
             content={<WeatherChartTooltip unit={unit} />}
-            cursor={{ stroke: "#62748e", strokeDasharray: "3 3" }}
+            cursor={{ stroke: "var(--chart-base)", strokeDasharray: "3 3" }}
           />
           <Area
             yAxisId={"temperature"}
@@ -111,10 +124,9 @@ export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
             dot={false}
             activeDot={{
               r: 4,
-              fill: "#007595",
+              fill: "#00a6f470",
             }}
-            stroke="#007595"
-            strokeWidth={1.75}
+            strokeWidth={0}
           />
         </ComposedChart>
       </ResponsiveContainer>
