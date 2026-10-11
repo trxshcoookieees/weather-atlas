@@ -1,12 +1,4 @@
-import {
-  CloudRain,
-  Droplets,
-  Eye,
-  Gauge,
-  Heart,
-  Navigation,
-  Sun,
-} from "lucide-react";
+import { CloudRain, Droplets, Eye, Gauge, Navigation, Sun } from "lucide-react";
 import Link from "next/link";
 import { Icon } from "@/components/ui";
 import { compassPoint } from "@/lib/utils";
@@ -27,19 +19,47 @@ import {
   getWeatherLabel,
 } from "@/lib/weather/weather-descriptions";
 import { WeatherMetric } from "@/components/weather/WeatherMetric";
+import { SaveCity } from "@/components/ui/SaveCity";
+
+const DEFAULT_CITY = {
+  latitude: "52.52437",
+  longitude: "13.41053",
+};
 
 export default async function Overview({ searchParams }: PageProps<"/">) {
+  const {
+    unit = "C",
+    latitude,
+    longitude,
+    id,
+    name,
+    admin,
+    country,
+  } = await searchParams;
+
+  const lat = latitude ? Number(latitude) : Number(DEFAULT_CITY.latitude);
+  const lng = longitude ? Number(longitude) : Number(DEFAULT_CITY.longitude);
+  // TODO check 0 value, check range for coordinates
+  // -90 <= lat <= 90
+  // -180 <= lng <= 180
+
+  const city = {
+    id: id ? Number(id) : 2950159,
+    name: name ?? "Berlin",
+    latitude: lat,
+    longitude: lng,
+    admin: admin ?? "",
+    country: country ?? "",
+  };
+
   const {
     location,
     current,
     hourly,
     daily,
-    previousDay,
     pressureDelta,
     precipitationDelta,
-  } = await getWeatherForecast(Number(61.6886), Number(27.2723));
-
-  const unit = (await searchParams).unit === "F" ? "F" : "C";
+  } = await getWeatherForecast(lat, lng);
 
   const todayKey = parseWeatherDay(current.time, location.timezone).key;
   const today = daily[0];
@@ -58,9 +78,9 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
         <section className="flex items-center justify-between">
           <div>
             <div className="flex items-end gap-2">
-              <span className="text-3xl font-semibold">Mikkeli</span>
+              <span className="text-3xl font-semibold">{city.name}</span>
               <span className="text-sm text-neutral-600 dark:text-neutral-400">
-                South Savo, Finland
+                {[city.admin, city.country].filter(Boolean).join(", ")}
               </span>
             </div>
             <p className="text-sm">
@@ -68,13 +88,14 @@ export default async function Overview({ searchParams }: PageProps<"/">) {
               {parseWeatherDateTime(current.time, location.timezone).label}
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Icon
-              icon={Heart}
-              className="stroke-neutral-600 dark:stroke-neutral-300"
-            />
-            <span className="text-sm font-semibold">Save</span>
-          </div>
+          <SaveCity
+            id={city.id}
+            name={city.name}
+            latitude={city.latitude}
+            longitude={city.longitude}
+            admin={city.admin}
+            country={city.country}
+          />
         </section>
         {/* Current weather and parameters */}
         <section className="flex min-h-75 gap-5">

@@ -12,12 +12,19 @@ import {
   MapPinPlus,
   Scale,
   Settings2,
+  Trash,
   Wind,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  CHANGE_EVENT,
+  getSavedCities,
+  removeCity,
+  SavedCity,
+} from "@/lib/weather/saved-cities";
 
 const navigation = [
   {
@@ -51,28 +58,27 @@ const navigation = [
     icon: Wind,
   },
 ];
-const savedCities = [
-  {
-    label: "Amsterdam",
-    temperature: 18,
-  },
-  {
-    label: "London",
-    temperature: 16,
-  },
-  {
-    label: "Mikkeli",
-    temperature: 12,
-  },
-  {
-    label: "Krasnoyarsk",
-    temperature: 9,
-  },
-];
 
 export function Sidebar() {
+  const router = useRouter();
+  const [cities, setCities] = useState<SavedCity[]>([]);
+
+  useEffect(() => {
+    const updateCities = () => {
+      setCities(getSavedCities());
+    };
+
+    updateCities();
+
+    window.addEventListener(CHANGE_EVENT, updateCities);
+
+    return () => {
+      window.removeEventListener(CHANGE_EVENT, updateCities);
+    };
+  }, []);
+
   const pathname = usePathname();
-  const [currentCity, setCurrentCity] = useState("Amsterdam");
+  // const [currentCity, setCurrentCity] = useState("Amsterdam");
   return (
     <aside
       id="sidebar"
@@ -113,23 +119,33 @@ export function Sidebar() {
           <Icon icon={MapPinPlus} />
         </div>
         <ul className="space-y-1.5">
-          {savedCities.map((item) => {
-            const isActive = item.label == currentCity;
+          {cities.map((city) => {
+            const isActive = city.name == "Mikkeli";
             return (
               <li
-                key={item.label}
+                key={city.id}
                 className={cn(
                   "flex h-10 cursor-pointer items-center justify-between gap-3 px-2 text-sm text-neutral-600 dark:text-neutral-400",
                   isActive &&
                     "text-md font-semibold text-neutral-800 dark:text-neutral-200",
                 )}
-                onClick={() => setCurrentCity(item.label)}
+                onClick={() => {
+                  router.push(
+                    `/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
+                  );
+                }}
               >
                 <div className="flex items-center gap-3">
                   <Icon icon={isActive ? MapPinHouse : MapPin} />
-                  <span>{item.label}</span>
+                  <span>{city.name}</span>
                 </div>
-                <span>{item.temperature}°C</span>
+                <div
+                  className="flex cursor-pointer items-center gap-3 transition-colors hover:text-red-500"
+                  onClick={() => removeCity(city.id)}
+                >
+                  <Icon icon={Trash} />
+                </div>
+                {/*<span>{city.temperature}°C</span>*/}
               </li>
             );
           })}

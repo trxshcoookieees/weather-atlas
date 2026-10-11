@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { getCity } from "@/lib/weather/api";
-import { CityAPIResponse } from "@/lib/weather/types";
+import { City } from "@/lib/weather/types";
+import { useRouter } from "next/navigation";
 
 export function CitySearch() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [cities, setCities] = useState<CityAPIResponse[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +84,15 @@ export function CitySearch() {
             </li>
           ) : (
             cities.map((city) => (
-              <li key={city.id}>
+              <li
+                key={city.id}
+                onClick={() => {
+                  router.push(
+                    `/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin1 ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
+                  );
+                  setIsOpen(false);
+                }}
+              >
                 <button
                   type="button"
                   className="w-full px-4 py-3 text-left text-sm hover:bg-black/5 dark:hover:bg-white/5"

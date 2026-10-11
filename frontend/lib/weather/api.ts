@@ -1,8 +1,4 @@
-import type {
-  WeatherAPIResponse,
-  WeatherResponse,
-  CityAPIResponse,
-} from "./types";
+import type { WeatherAPIResponse, WeatherResponse, City } from "./types";
 import { parseWeatherDateTime } from "@/lib/formatters";
 
 const API_URL = process.env.BACKEND_URL || "http://localhost:8000";
@@ -56,7 +52,7 @@ export async function getWeatherForecast(
 export async function getCity(
   query: string,
   signal?: AbortSignal,
-): Promise<CityAPIResponse[]> {
+): Promise<City[]> {
   const response = await fetch(
     `${API_URL}/city?query=${encodeURIComponent(query)}`,
     {
