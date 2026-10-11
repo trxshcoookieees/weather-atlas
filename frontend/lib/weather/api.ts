@@ -56,7 +56,7 @@ export async function getWeatherForecast(
 export async function getCity(
   query: string,
   signal?: AbortSignal,
-): Promise<CityAPIResponse> {
+): Promise<CityAPIResponse[]> {
   const response = await fetch(
     `${API_URL}/city?query=${encodeURIComponent(query)}`,
     {

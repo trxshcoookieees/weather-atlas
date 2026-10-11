@@ -91,7 +91,7 @@ export type CityAPIResponse = {
   id: number;
   name: string;
   country: string;
-  countryCode: string;
+  country_code: string;
   admin1?: string;
   latitude: number;
   longitude: number;
