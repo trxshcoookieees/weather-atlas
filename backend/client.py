@@ -6,6 +6,7 @@ import requests
 from retry_requests import retry
 
 OPENMETEO_URL = "https://api.open-meteo.com/v1/forecast"
+GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 
 load_dotenv()
 
@@ -91,3 +92,17 @@ def fetch_weather(latitude: float, longitude: float):
         OPENMETEO_URL,
         params=params,
     )[0]
+
+
+def fetch_cities(query: str):
+    params = {
+        "name": query,
+        "count": 5,
+        "language": "en",
+        "format": "json",
+    }
+
+    response = requests.get(GEOCODING_URL, params=params, timeout=10)
+    response.raise_for_status()
+
+    return response.json().get("results", [])

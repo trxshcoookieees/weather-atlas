@@ -77,3 +77,27 @@ class DailyWeather(BaseModel):
     daylightDuration: int
     sunlightDuration: int
     visibility: int
+
+
+class CitySearch(BaseModel):
+    id: int
+    name: str
+    latitude: float
+    longitude: float
+    timezone: str
+    country_code: str
+    country: str
+
+    elevation: float | None = None
+    feature_code: str | None = None
+    country_id: int | None = None
+    population: int | None = None
+    postcodes: list[str] | None = None
+    admin1: str | None = None
+    admin2: str | None = None
+    admin3: str | None = None
+    admin4: str | None = None
+    admin1_id: int | None = None
+    admin2_id: int | None = None
+    admin3_id: int | None = None
+    admin4_id: int | None = None
