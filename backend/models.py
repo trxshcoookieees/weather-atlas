@@ -86,7 +86,7 @@ class CitySearch(BaseModel):
     longitude: float
     timezone: str
     country_code: str
-    country: str
+    country: str | None = None
 
     elevation: float | None = None
     feature_code: str | None = None
