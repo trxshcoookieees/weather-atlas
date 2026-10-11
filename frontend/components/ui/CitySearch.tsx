@@ -69,7 +69,7 @@ export function CitySearch() {
       />
 
       {isOpen && (
-        <ul className="surface absolute top-full right-0 left-0 mt-2 overflow-hidden rounded-lg">
+        <ul className="absolute top-full right-0 left-0 mt-2 overflow-hidden rounded-lg border border-white/30 bg-stone-300 shadow-md dark:bg-neutral-800">
           {isLoading ? (
             <li className="px-4 py-3 text-sm text-neutral-500">
               Поиск городов...
