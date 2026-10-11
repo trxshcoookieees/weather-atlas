@@ -1,18 +1,18 @@
-from datetime import timedelta
+from dotenv import load_dotenv
+from upstash_redis import Redis
 
 import openmeteo_requests
-import requests_cache
+import requests
 from retry_requests import retry
 
 OPENMETEO_URL = "https://api.open-meteo.com/v1/forecast"
 
-cache_session = requests_cache.CachedSession(
-    ".cache",
-    expire_after=timedelta(minutes=5),
-)
+load_dotenv()
+
+redis = Redis.from_env()
 
 retry_session = retry(
-    cache_session,
+    requests.Session(),
     retries=5,
     backoff_factor=0.2,
 )
