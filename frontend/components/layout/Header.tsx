@@ -6,7 +6,7 @@ import { CitySearch } from "@/components/ui/CitySearch";
 
 export function Header() {
   return (
-    <header className="sticky top-0 flex min-h-18.75 items-center justify-between gap-x-8 bg-transparent px-8 backdrop-blur-md">
+    <header className="sticky top-0 flex items-center justify-between gap-x-8 bg-transparent px-8 py-7 backdrop-blur-md">
       <div className="relative w-full max-w-125">
         <Icon
           icon={Search}

@@ -1,25 +1,24 @@
 "use client";
 
 import { WeatherContext } from "@/context/WeatherContext";
-import { WeatherResponse } from "@/lib/weather/types";
-import { useCallback, useEffect, useState } from "react";
-import { SavedCity, setActiveCity } from "@/lib/weather/saved-cities";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useCity } from "@/context/CityContext";
+import type { WeatherResponse } from "@/lib/weather/types";
+import type { SavedCity } from "@/lib/weather/saved-cities";
 import { getWeatherForecast } from "@/lib/weather/api";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const CACHE = new Map<number, { data: WeatherResponse; t: number }>();
 const STALE = 5 * 60 * 1000;
 
-export function WeatherProvider({
-  children,
-  defaultCity,
-}: {
-  children: React.ReactNode;
-}) {
-  const [city, setCityState] = useState<SavedCity | null>(null);
+export function WeatherProvider({ children }: { children: React.ReactNode }) {
+  const { activeCity, setActiveCity } = useCity();
+
+  const [city, setCityState] = useState<SavedCity | null>(activeCity);
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
@@ -30,50 +29,56 @@ export function WeatherProvider({
 
     try {
       const cached = CACHE.get(c.id);
+
       if (cached && Date.now() - cached.t < STALE) {
         setWeather(cached.data);
-        setLoading(false);
         return;
       }
+
       const data = await getWeatherForecast(c.latitude, c.longitude);
+
       CACHE.set(c.id, { data, t: Date.now() });
       setWeather(data);
-      setLoading(false);
-    } catch (error) {
+    } catch (err) {
       setError(
-        error instanceof Error ? error.message : "Failed to load weather",
+        err instanceof Error ? err : new Error("Failed to load weather"),
       );
+    } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    //
-  });
+    setCityState(activeCity);
+  }, [activeCity]);
+
+  useEffect(() => {
+    if (!city) {
+      setWeather(null);
+      return;
+    }
+
+    void fetchCity(city);
+  }, [city, fetchCity]);
 
   const setCity = useCallback(
-    async (c: SavedCity) => {
-      const params = new URLSearchParams();
-      params.set("unit", unit);
-      router.push(`/${c.countryCode}/${c.region}/${c.name}/today?${params}`, {
-        scroll: false,
-      });
+    (c: SavedCity) => {
+      setCityState(c);
       setActiveCity(c);
-      await fetchCity(c);
+
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("unit", unit);
+
+      router.push(
+        `/${c.countryCode}/${c.admin1}/${c.name}/today?${params.toString()}`,
+        { scroll: false },
+      );
     },
-    [unit, fetchCity, router],
+    [setActiveCity, unit, router, searchParams],
   );
 
   return (
-    <WeatherContext.Provider
-      value={{
-        city,
-        weather,
-        loading,
-        error,
-        setCity,
-      }}
-    >
+    <WeatherContext.Provider value={{ city, weather, loading, error, setCity }}>
       {children}
     </WeatherContext.Provider>
   );

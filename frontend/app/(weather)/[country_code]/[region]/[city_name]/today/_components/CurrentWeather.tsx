@@ -1,3 +1,5 @@
+"use client";
+
 import { WeatherMetric } from "@/components/weather/WeatherMetric";
 import { CloudRain, Droplets, Eye, Gauge, Navigation, Sun } from "lucide-react";
 import { WeatherIcon } from "@/components/weather";
@@ -12,24 +14,42 @@ import {
 } from "@/lib/weather/weather-descriptions";
 import { compassPoint } from "@/lib/utils";
 import { useWeather } from "@/context/WeatherContext";
+import { useSearchParams } from "next/navigation";
 
 export function CurrentWeather() {
+  const { weather, loading, error } = useWeather();
+  const searchParams = useSearchParams();
+  const unit = searchParams.get("unit") === "F" ? "F" : "C";
+
+  if (loading) {
+    return <p>Loading weather...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  if (!weather) {
+    return null;
+  }
+
   const {
-    hourly,
+    location,
     current,
+    hourly,
     daily,
     pressureDelta,
     precipitationDelta,
-    location,
-  } = useWeather();
+  } = weather;
+
   const today = daily[0];
-  const unit = "C";
   const currentHour = Number(
     parseWeatherDateTime(current.time, location.timezone).hours,
   );
   const currentHourIndex = 24 + currentHour;
 
   const currentVisibility = Math.round((today?.visibility ?? 0) / 1000);
+
   return (
     <section className="flex min-h-75 gap-5">
       <div className="surface flex w-2/3 items-center justify-between rounded-4xl p-7 pr-32">

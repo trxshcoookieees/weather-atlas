@@ -18,15 +18,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui";
-import { useEffect, useState } from "react";
-import {
-  CHANGE_EVENT,
-  getActiveCity,
-  getSavedCities,
-  removeCity,
-  SavedCity,
-  setActiveCity,
-} from "@/lib/weather/saved-cities";
+import { useCity } from "@/context/CityContext";
 
 const navigation = [
   {
@@ -62,24 +54,18 @@ const navigation = [
 ];
 
 export function Sidebar() {
-  const router = useRouter();
-  // const [cities, setCities] = useState<SavedCity[]>([]);
-
-  // useEffect(() => {
-  //   const updateCities = () => {
-  //     setCities(getSavedCities());
-  //   };
-  //
-  //   updateCities();
-  //
-  //   window.addEventListener(CHANGE_EVENT, updateCities);
-  //
-  //   return () => {
-  //     window.removeEventListener(CHANGE_EVENT, updateCities);
-  //   };
-  // }, []);
-
   const pathname = usePathname();
+  const router = useRouter();
+  const { activeCity, setActiveCity, savedCities, removeCity } = useCity();
+
+  if (!activeCity) {
+    return null;
+  }
+
+  if (!savedCities) {
+    return null;
+  }
+
   return (
     <aside
       id="sidebar"
@@ -114,14 +100,14 @@ export function Sidebar() {
           );
         })}
       </nav>
-      {/*<div>
+      <div>
         <div className="mb-2.5 flex items-center justify-between px-2">
           <span className="font-semibold">Saved Locations</span>
           <Icon icon={MapPinPlus} />
         </div>
         <ul className="space-y-1.5">
-          {cities.map((city) => {
-            const isActive = city.id == activeCityId;
+          {savedCities.map((city) => {
+            const isActive = city.id == activeCity.id;
             return (
               <li
                 key={city.id}
@@ -133,7 +119,7 @@ export function Sidebar() {
                 onClick={() => {
                   setActiveCity(city);
                   router.push(
-                    `/overview/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
+                    `/${city.countryCode}/${city.admin1}/${city.name}/today`,
                   );
                 }}
               >
@@ -147,12 +133,12 @@ export function Sidebar() {
                 >
                   <Icon icon={Trash} />
                 </div>
-                <span>{city.temperature}°C</span>
+                {/*<span>{city.temperature}°C</span>*/}
               </li>
             );
           })}
         </ul>
-      </div>*/}
+      </div>
       <div>
         <div className="flex h-10 items-center gap-3 px-2">
           <Icon icon={Settings2} />

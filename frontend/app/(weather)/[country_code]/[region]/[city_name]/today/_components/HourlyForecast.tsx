@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { formatTemperature, parseWeatherDateTime } from "@/lib/formatters";
 import { WeatherIcon } from "@/components/weather";
@@ -5,8 +7,18 @@ import { compassPoint } from "@/lib/utils";
 import { getWeatherIconName } from "@/lib/weather/weather-codes";
 import { Icon } from "@/components/ui";
 import { Droplets } from "lucide-react";
+import { useWeather } from "@/context/WeatherContext";
+import { useSearchParams } from "next/navigation";
 
 export function HourlyForecast() {
+  const { weather } = useWeather();
+  const searchParams = useSearchParams();
+  const unit = searchParams.get("unit") === "F" ? "F" : "C";
+
+  if (!weather) return null;
+
+  const { hourly, current, location } = weather;
+
   return (
     <section className="surface space-y-4 rounded-4xl p-5.5">
       <div className="flex items-end justify-between">

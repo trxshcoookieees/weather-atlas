@@ -5,7 +5,7 @@ export type SavedCity = {
   longitude: number;
   country?: string;
   countryCode: string;
-  region: string;
+  admin1: string;
 };
 
 const SAVED_CITIES_STORAGE_KEY = "wa:saved-cities";
@@ -24,9 +24,7 @@ export function getSavedCities(): SavedCity[] {
 export function saveCity(city: SavedCity) {
   const cities = getSavedCities();
 
-  if (cities.some((savedCity) => savedCity.id === city.id)) {
-    return;
-  }
+  if (cities.some((c) => c.id === city.id)) return;
 
   localStorage.setItem(
     SAVED_CITIES_STORAGE_KEY,
@@ -56,7 +54,7 @@ export function getActiveCity(): SavedCity {
 }
 
 export function removeCity(id: number) {
-  const cities = getSavedCities().filter((city) => city.id !== id);
+  const cities = getSavedCities().filter((c) => c.id !== id);
 
   localStorage.setItem(SAVED_CITIES_STORAGE_KEY, JSON.stringify(cities));
   window.dispatchEvent(new Event(CHANGE_EVENT));

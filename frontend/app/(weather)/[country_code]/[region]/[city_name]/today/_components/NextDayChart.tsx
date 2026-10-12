@@ -1,6 +1,22 @@
+"use client";
+
 import { Chart } from "@/components/weather";
+import { useWeather } from "@/context/WeatherContext";
+import { parseWeatherDateTime } from "@/lib/formatters";
+import { useSearchParams } from "next/navigation";
 
 export function NextDayChart() {
+  const { weather } = useWeather();
+  const searchParams = useSearchParams();
+  const unit = searchParams.get("unit") === "F" ? "F" : "C";
+
+  if (!weather) return null;
+
+  const { hourly, current, location } = weather;
+  const currentHour = Number(
+    parseWeatherDateTime(current.time, location.timezone).hours,
+  );
+
   return (
     <div className="surface max-h-max w-full space-y-5 rounded-4xl p-6">
       <div>

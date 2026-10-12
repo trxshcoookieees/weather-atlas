@@ -2,9 +2,12 @@
 
 import { Icon } from "@/components/ui/icon";
 import { Heart } from "lucide-react";
-import { saveCity, SavedCity } from "@/lib/weather/saved-cities";
+import type { SavedCity } from "@/lib/weather/saved-cities";
+import { useCity } from "@/context/CityContext";
 
 export function SaveCity(city: SavedCity) {
+  const { saveCity } = useCity();
+
   return (
     <div
       className="flex cursor-pointer items-center gap-2"

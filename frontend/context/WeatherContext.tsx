@@ -9,10 +9,10 @@ type WeatherContextValue = {
   weather: WeatherResponse | null;
   loading: boolean;
   error: Error | null;
-  setCity: (c: SavedCity) => Promise<void>;
+  setCity: (c: SavedCity) => void;
 };
 
-export const WeatherContext = createContext<WeatherResponse | null>(null);
+export const WeatherContext = createContext<WeatherContextValue | null>(null);
 
 export function useWeather() {
   const context = useContext(WeatherContext);

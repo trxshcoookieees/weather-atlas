@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getCity } from "@/lib/weather/api";
 import { City } from "@/lib/weather/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { setActiveCity } from "@/lib/weather/saved-cities";
 import { slugify } from "@/lib/utils";
 
@@ -80,6 +80,8 @@ export function CitySearch() {
 
     return () => controller.abort();
   }, [debouncedQuery]);
+  const searchParams = useSearchParams();
+  const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
   return (
     <div className="relative">
@@ -111,9 +113,17 @@ export function CitySearch() {
               <li
                 key={city.id}
                 onClick={() => {
-                  setActiveCity(city);
+                  setActiveCity({
+                    id: city.id,
+                    name: city.name,
+                    latitude: city.latitude,
+                    longitude: city.longitude,
+                    country: city.country,
+                    countryCode: city.country_code,
+                    admin1: city.admin1,
+                  });
                   router.push(
-                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}`,
+                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}/today?unit=${unit}`,
                   );
                   setIsOpen(false);
                 }}

@@ -1,21 +1,23 @@
-import { CurrentWeather } from "./_components";
+import {
+  CurrentWeather,
+  HourlyForecast,
+  NextDayChart,
+  WeeklyForecast,
+} from "./_components";
 
-export default async function Overview({
-  params,
-}: {
-  params: Promise<{ country_code: string; admin: string; city_name: string }>;
-}) {
+export default async function Overview() {
   return (
     <>
       {/* Current weather and parameters */}
       <CurrentWeather />
       {/*/!* Hourly forecast *!/*/}
-      {/*<HourlyForecast />*/}
+      <HourlyForecast />
       {/*/!* 24h & Weekly forecast*!/*/}
-      {/*<section className="flex gap-6">*/}
-      {/*  <NextDayChart />*/}
-      {/*  <WeeklyForecast />*/}
-      {/*</section>*/}
+      <section className="flex gap-6">
+        <NextDayChart />
+        <WeeklyForecast />
+      </section>
+      <div className="flex gap-6">Source Notes</div>
     </>
   );
 }

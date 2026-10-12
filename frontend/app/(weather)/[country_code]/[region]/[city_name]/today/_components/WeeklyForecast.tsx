@@ -1,4 +1,24 @@
+"use client";
+
+import { useWeather } from "@/context/WeatherContext";
+import { formatTemperature, parseWeatherDay } from "@/lib/formatters";
+import { getWeatherIconName } from "@/lib/weather/weather-codes";
+import { WeatherIcon } from "@/components/weather";
+import { getWeatherLabel } from "@/lib/weather/weather-descriptions";
+import { Icon } from "@/components/ui";
+import { Droplets } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+
 export function WeeklyForecast() {
+  const { weather } = useWeather();
+  const searchParams = useSearchParams();
+  const unit = searchParams.get("unit") === "F" ? "F" : "C";
+
+  if (!weather) return null;
+
+  const { daily, current, location } = weather;
+  const todayKey = parseWeatherDay(current.time, location.timezone).key;
+
   return (
     <div className="surface w-full space-y-3.5 rounded-4xl p-6">
       <div>
