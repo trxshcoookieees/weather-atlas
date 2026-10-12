@@ -111,13 +111,14 @@ async def get_city(query: str = Query(min_length=2, max_length=100)):
             detail="City search service is unavailable",
         ) from exc
 
-    try:
-        redis.set(
-            cache_key,
-            json.dumps(cities),
-            ex=86400,
-        )
-    except Exception:
-        logger.exception("Failed to cache city search results")
+    if cities:
+        try:
+            redis.set(
+                cache_key,
+                json.dumps(cities),
+                ex=86400,
+            )
+        except Exception:
+            logger.exception("Failed to cache city search results")
 
     return cities
