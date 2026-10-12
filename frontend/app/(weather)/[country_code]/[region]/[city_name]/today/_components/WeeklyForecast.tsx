@@ -8,9 +8,10 @@ import { getWeatherLabel } from "@/lib/weather/weather-descriptions";
 import { Icon } from "@/components/ui";
 import { Droplets } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { WeeklyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/WeeklyForecastSkeleton";
 
 export function WeeklyForecast() {
-  const { weather } = useWeather();
+  const { weather, loading } = useWeather();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
@@ -19,7 +20,9 @@ export function WeeklyForecast() {
   const { daily, current, location } = weather;
   const todayKey = parseWeatherDay(current.time, location.timezone).key;
 
-  return (
+  return loading ? (
+    <WeeklyForecastSkeleton />
+  ) : (
     <div className="surface w-full space-y-3.5 rounded-4xl p-6">
       <div>
         <p className="text-xl font-semibold">7-day Forecast</p>

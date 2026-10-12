@@ -15,15 +15,12 @@ import {
 import { compassPoint } from "@/lib/utils";
 import { useWeather } from "@/context/WeatherContext";
 import { useSearchParams } from "next/navigation";
+import { CurrentWeatherSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/CurrentWeatherSkeleton";
 
 export function CurrentWeather() {
   const { weather, loading, error } = useWeather();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
-
-  if (loading) {
-    return <p>Loading weather...</p>;
-  }
 
   if (error) {
     return <p>{error.message}</p>;
@@ -50,7 +47,9 @@ export function CurrentWeather() {
 
   const currentVisibility = Math.round((today?.visibility ?? 0) / 1000);
 
-  return (
+  return loading ? (
+    <CurrentWeatherSkeleton />
+  ) : (
     <section className="flex min-h-75 gap-5">
       <div className="surface flex w-2/3 items-center justify-between rounded-4xl p-7 pr-32">
         <div className="h-full space-y-3">
