@@ -1,5 +1,8 @@
+import os
+
 from dotenv import load_dotenv
-from upstash_redis import Redis
+from upstash_redis import Redis as UpstashRedis
+from redis import Redis as LocalRedis
 
 import openmeteo_requests
 import requests
@@ -10,7 +13,15 @@ GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 
 load_dotenv()
 
-redis = Redis.from_env()
+redis_url = os.getenv("REDIS_URL")
+
+if redis_url:
+    redis = LocalRedis.from_url(
+        redis_url,
+        decode_responses=True,
+    )
+else:
+    redis = UpstashRedis.from_env()
 
 retry_session = retry(
     requests.Session(),
