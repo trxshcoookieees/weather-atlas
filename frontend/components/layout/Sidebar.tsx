@@ -12,12 +12,13 @@ import {
   MapPinPlus,
   Scale,
   Settings2,
+  Trash,
   Wind,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui";
-import { useState } from "react";
+import { useCity } from "@/context/CityContext";
 
 const navigation = [
   {
@@ -27,52 +28,44 @@ const navigation = [
   },
   {
     label: "Forecast",
-    href: "/forecast",
+    href: "#",
     icon: CalendarDays,
   },
   {
     label: "Historical",
-    href: "/historical",
+    href: "#",
     icon: ChartNoAxesCombined,
   },
   {
     label: "Map",
-    href: "/map",
+    href: "#",
     icon: Map,
   },
   {
     label: "Compare",
-    href: "/compare",
+    href: "#",
     icon: Scale,
   },
   {
     label: "Air Quality",
-    href: "/air-quality",
+    href: "#",
     icon: Wind,
-  },
-];
-const savedCities = [
-  {
-    label: "Amsterdam",
-    temperature: 18,
-  },
-  {
-    label: "London",
-    temperature: 16,
-  },
-  {
-    label: "Mikkeli",
-    temperature: 12,
-  },
-  {
-    label: "Krasnoyarsk",
-    temperature: 9,
   },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [currentCity, setCurrentCity] = useState("Amsterdam");
+  const router = useRouter();
+  const { activeCity, setActiveCity, savedCities, removeCity } = useCity();
+
+  if (!activeCity) {
+    return null;
+  }
+
+  if (!savedCities) {
+    return null;
+  }
+
   return (
     <aside
       id="sidebar"
@@ -113,23 +106,34 @@ export function Sidebar() {
           <Icon icon={MapPinPlus} />
         </div>
         <ul className="space-y-1.5">
-          {savedCities.map((item) => {
-            const isActive = item.label == currentCity;
+          {savedCities.map((city) => {
+            const isActive = city.id == activeCity.id;
             return (
               <li
-                key={item.label}
+                key={city.id}
                 className={cn(
                   "flex h-10 cursor-pointer items-center justify-between gap-3 px-2 text-sm text-neutral-600 dark:text-neutral-400",
                   isActive &&
                     "text-md font-semibold text-neutral-800 dark:text-neutral-200",
                 )}
-                onClick={() => setCurrentCity(item.label)}
+                onClick={() => {
+                  setActiveCity(city);
+                  router.push(
+                    `/${city.countryCode}/${city.admin1}/${city.name}/today`,
+                  );
+                }}
               >
                 <div className="flex items-center gap-3">
                   <Icon icon={isActive ? MapPinHouse : MapPin} />
-                  <span>{item.label}</span>
+                  <span>{city.name}</span>
                 </div>
-                <span>{item.temperature}°C</span>
+                <div
+                  className="flex cursor-pointer items-center gap-3 transition-colors hover:text-red-500"
+                  onClick={() => removeCity(city.id)}
+                >
+                  <Icon icon={Trash} />
+                </div>
+                {/*<span>{city.temperature}°C</span>*/}
               </li>
             );
           })}

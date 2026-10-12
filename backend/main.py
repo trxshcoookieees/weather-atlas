@@ -1,9 +1,11 @@
 from zoneinfo import ZoneInfo
 
+import requests
 from fastapi import FastAPI, HTTPException
-
-from client import redis, fetch_weather
-from models import WeatherForecast
+from fastapi.params import Query
+from fastapi.middleware.cors import CORSMiddleware
+from client import redis, fetch_weather, fetch_cities
+from models import WeatherForecast, CitySearch
 from parsers import (
     parse_location,
     parse_current,
@@ -11,12 +13,20 @@ from parsers import (
     parse_daily,
 )
 
+import json
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/forecast", response_model=WeatherForecast)
@@ -73,3 +83,42 @@ async def get_weather(
         logger.exception("Redis SET failed")
 
     return forecast
+
+
+@app.get("/city", response_model=list[CitySearch])
+async def get_city(query: str = Query(min_length=2, max_length=100)):
+    normalized_query = " ".join(query.split()).casefold()
+    cache_key = f"city:{normalized_query}"
+
+    try:
+        cached = redis.get(cache_key)
+
+        if cached:
+            if isinstance(cached, bytes):
+                cached = cached.decode("utf-8")
+
+            return json.loads(cached)
+
+    except Exception:
+        logger.exception("Failed to read city search cache")
+
+    try:
+        cities = fetch_cities(normalized_query)
+    except requests.RequestException as exc:
+        logger.exception("Open-Meteo geocoding request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="City search service is unavailable",
+        ) from exc
+
+    if cities:
+        try:
+            redis.set(
+                cache_key,
+                json.dumps(cities),
+                ex=86400,
+            )
+        except Exception:
+            logger.exception("Failed to cache city search results")
+
+    return cities

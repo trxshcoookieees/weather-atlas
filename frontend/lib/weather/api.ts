@@ -1,4 +1,4 @@
-import type { APIResponse, WeatherResponse } from "./types";
+import type { WeatherAPIResponse, WeatherResponse, City } from "./types";
 import { parseWeatherDateTime } from "@/lib/formatters";
 
 const API_URL = process.env.BACKEND_URL || "http://localhost:8000";
@@ -18,7 +18,7 @@ export async function getWeatherForecast(
     throw new Error("Failed to fetch weather forecast");
   }
 
-  const data: APIResponse = await response.json();
+  const data: WeatherAPIResponse = await response.json();
 
   const currentHour = Number(
     parseWeatherDateTime(data.current.time, data.location.timezone).hours,
@@ -47,4 +47,23 @@ export async function getWeatherForecast(
     pressureDelta,
     precipitationDelta,
   };
+}
+
+export async function getCity(
+  query: string,
+  signal?: AbortSignal,
+): Promise<City[]> {
+  const response = await fetch(
+    `${API_URL}/city?query=${encodeURIComponent(query)}`,
+    {
+      cache: "no-store",
+      signal,
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch city: ${response.status}`);
+  }
+
+  return response.json();
 }

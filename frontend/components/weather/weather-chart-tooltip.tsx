@@ -1,4 +1,4 @@
-import { HourlyChartPoint } from "@/components/weather/weather-chart";
+import { HourlyChartPoint } from "@/components/weather/chart";
 import { WeatherIcon } from "@/components/weather/weather-icon";
 import { formatTemperature } from "@/lib/formatters";
 

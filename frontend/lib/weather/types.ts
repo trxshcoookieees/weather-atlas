@@ -67,7 +67,7 @@ export type DailyWeather = {
   visibility: number;
 };
 
-export type APIResponse = {
+export type WeatherAPIResponse = {
   location: Location;
   current: CurrentWeather;
   hourly: HourlyWeather[];
@@ -85,4 +85,15 @@ export type WeatherResponse = {
   };
   pressureDelta: number;
   precipitationDelta: number;
+};
+
+export type City = {
+  id: number;
+  name: string;
+  country?: string;
+  country_code: string;
+  admin1: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
 };
