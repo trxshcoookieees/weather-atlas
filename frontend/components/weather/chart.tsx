@@ -23,13 +23,13 @@ export type HourlyChartPoint = {
   weather: WeatherIconName;
 };
 
-type WeatherChartProps = {
+type ChartProps = {
   data: HourlyWeather[];
   timezone: string;
   unit: "C" | "F";
 };
 
-export function WeatherChart({ data, timezone, unit }: WeatherChartProps) {
+export function Chart({ data, timezone, unit }: ChartProps) {
   const temperatures = data.map((h) => h.temperature);
   let minTemperature = Math.min(...temperatures);
   let maxTemperature = Math.max(...temperatures);

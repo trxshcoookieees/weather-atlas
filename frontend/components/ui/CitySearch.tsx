@@ -1,18 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCity } from "@/lib/weather/api";
 import { City } from "@/lib/weather/types";
 import { useRouter } from "next/navigation";
+import { setActiveCity } from "@/lib/weather/saved-cities";
+import { slugify } from "@/lib/utils";
 
 export function CitySearch() {
   const router = useRouter();
+  const dropdownRef = useRef<HTMLUListElement>(null);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [cities, setCities] = useState<City[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      const target = event.target;
+
+      if (target instanceof Node && !dropdownRef.current?.contains(target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown, true);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -71,7 +92,10 @@ export function CitySearch() {
       />
 
       {isOpen && (
-        <ul className="absolute top-full right-0 left-0 mt-2 overflow-hidden rounded-lg border border-white/30 bg-stone-300 shadow-md dark:bg-neutral-800">
+        <ul
+          className="absolute top-full right-0 left-0 mt-2 overflow-hidden rounded-lg border border-white/30 bg-stone-300 shadow-md dark:bg-neutral-800"
+          ref={dropdownRef}
+        >
           {isLoading ? (
             <li className="px-4 py-3 text-sm text-neutral-500">
               Поиск городов...
@@ -87,11 +111,13 @@ export function CitySearch() {
               <li
                 key={city.id}
                 onClick={() => {
+                  setActiveCity(city);
                   router.push(
-                    `/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin1 ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
+                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}`,
                   );
                   setIsOpen(false);
                 }}
+                onBlur={() => setIsOpen(false)}
               >
                 <button
                   type="button"

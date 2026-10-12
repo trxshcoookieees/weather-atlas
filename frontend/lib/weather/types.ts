@@ -92,7 +92,7 @@ export type City = {
   name: string;
   country?: string;
   country_code: string;
-  admin1?: string;
+  region: string;
   latitude: number;
   longitude: number;
   timezone: string;

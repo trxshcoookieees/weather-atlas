@@ -21,9 +21,11 @@ import { Icon } from "@/components/ui";
 import { useEffect, useState } from "react";
 import {
   CHANGE_EVENT,
+  getActiveCity,
   getSavedCities,
   removeCity,
   SavedCity,
+  setActiveCity,
 } from "@/lib/weather/saved-cities";
 
 const navigation = [
@@ -34,51 +36,50 @@ const navigation = [
   },
   {
     label: "Forecast",
-    href: "/forecast",
+    href: "#",
     icon: CalendarDays,
   },
   {
     label: "Historical",
-    href: "/historical",
+    href: "#",
     icon: ChartNoAxesCombined,
   },
   {
     label: "Map",
-    href: "/map",
+    href: "#",
     icon: Map,
   },
   {
     label: "Compare",
-    href: "/compare",
+    href: "#",
     icon: Scale,
   },
   {
     label: "Air Quality",
-    href: "/air-quality",
+    href: "#",
     icon: Wind,
   },
 ];
 
 export function Sidebar() {
   const router = useRouter();
-  const [cities, setCities] = useState<SavedCity[]>([]);
+  // const [cities, setCities] = useState<SavedCity[]>([]);
 
-  useEffect(() => {
-    const updateCities = () => {
-      setCities(getSavedCities());
-    };
-
-    updateCities();
-
-    window.addEventListener(CHANGE_EVENT, updateCities);
-
-    return () => {
-      window.removeEventListener(CHANGE_EVENT, updateCities);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const updateCities = () => {
+  //     setCities(getSavedCities());
+  //   };
+  //
+  //   updateCities();
+  //
+  //   window.addEventListener(CHANGE_EVENT, updateCities);
+  //
+  //   return () => {
+  //     window.removeEventListener(CHANGE_EVENT, updateCities);
+  //   };
+  // }, []);
 
   const pathname = usePathname();
-  // const [currentCity, setCurrentCity] = useState("Amsterdam");
   return (
     <aside
       id="sidebar"
@@ -113,14 +114,14 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div>
+      {/*<div>
         <div className="mb-2.5 flex items-center justify-between px-2">
           <span className="font-semibold">Saved Locations</span>
           <Icon icon={MapPinPlus} />
         </div>
         <ul className="space-y-1.5">
           {cities.map((city) => {
-            const isActive = city.name == "Mikkeli";
+            const isActive = city.id == activeCityId;
             return (
               <li
                 key={city.id}
@@ -130,8 +131,9 @@ export function Sidebar() {
                     "text-md font-semibold text-neutral-800 dark:text-neutral-200",
                 )}
                 onClick={() => {
+                  setActiveCity(city);
                   router.push(
-                    `/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
+                    `/overview/?latitude=${city.latitude}&longitude=${city.longitude}&id=${city.id}&name=${encodeURIComponent(city.name)}&admin=${encodeURIComponent(city.admin ?? "")}&country=${encodeURIComponent(city.country ?? "")}`,
                   );
                 }}
               >
@@ -145,12 +147,12 @@ export function Sidebar() {
                 >
                   <Icon icon={Trash} />
                 </div>
-                {/*<span>{city.temperature}°C</span>*/}
+                <span>{city.temperature}°C</span>
               </li>
             );
           })}
         </ul>
-      </div>
+      </div>*/}
       <div>
         <div className="flex h-10 items-center gap-3 px-2">
           <Icon icon={Settings2} />

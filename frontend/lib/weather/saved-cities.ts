@@ -4,15 +4,17 @@ export type SavedCity = {
   latitude: number;
   longitude: number;
   country?: string;
-  admin?: string;
+  countryCode: string;
+  region: string;
 };
 
-const STORAGE_KEY = "weather-atlas:saved-cities";
+const SAVED_CITIES_STORAGE_KEY = "wa:saved-cities";
+const ACTIVE_CITY_STORAGE_KEY = "wa:active-city";
 const CHANGE_EVENT = "saved-cities-changed";
 
 export function getSavedCities(): SavedCity[] {
   try {
-    const value = localStorage.getItem(STORAGE_KEY);
+    const value = localStorage.getItem(SAVED_CITIES_STORAGE_KEY);
     return value ? (JSON.parse(value) as SavedCity[]) : [];
   } catch {
     return [];
@@ -26,15 +28,37 @@ export function saveCity(city: SavedCity) {
     return;
   }
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...cities, city]));
+  localStorage.setItem(
+    SAVED_CITIES_STORAGE_KEY,
+    JSON.stringify([...cities, city]),
+  );
 
   window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function setActiveCity(city: SavedCity) {
+  localStorage.setItem(ACTIVE_CITY_STORAGE_KEY, JSON.stringify(city));
+  window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+export function getActiveCity(): SavedCity {
+  const city = localStorage.getItem(ACTIVE_CITY_STORAGE_KEY);
+
+  if (!city) {
+    throw new Error("No active city found.");
+  }
+
+  try {
+    return JSON.parse(city) as SavedCity;
+  } catch {
+    throw new Error("Active city contains invalid JSON.");
+  }
 }
 
 export function removeCity(id: number) {
   const cities = getSavedCities().filter((city) => city.id !== id);
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cities));
+  localStorage.setItem(SAVED_CITIES_STORAGE_KEY, JSON.stringify(cities));
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
