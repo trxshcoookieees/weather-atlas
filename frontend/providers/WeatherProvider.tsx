@@ -7,6 +7,7 @@ import type { SavedCity } from "@/lib/weather/saved-cities";
 import { getWeatherForecast } from "@/lib/weather/api";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { slugify } from "@/lib/utils";
 
 const CACHE = new Map<number, { data: WeatherResponse; t: number }>();
 const STALE = 5 * 60 * 1000;
@@ -70,7 +71,7 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
       params.set("unit", unit);
 
       router.push(
-        `/${c.countryCode}/${c.admin1}/${c.name}/today?${params.toString()}`,
+        `/${slugify(c.countryCode)}/${slugify(c.admin1)}/${slugify(c.name)}/today?${params.toString()}`,
         { scroll: false },
       );
     },
