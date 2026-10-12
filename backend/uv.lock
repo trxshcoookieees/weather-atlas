@@ -56,6 +56,7 @@ dependencies = [
     { name = "numpy" },
     { name = "openmeteo-requests" },
     { name = "python-dotenv" },
+    { name = "redis" },
     { name = "retry-requests" },
     { name = "tzdata" },
     { name = "upstash-redis" },
@@ -67,6 +68,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.3" },
     { name = "openmeteo-requests", specifier = ">=1.7.5" },
     { name = "python-dotenv", specifier = ">=1.2.3" },
+    { name = "redis", specifier = ">=8.1.0" },
     { name = "retry-requests", specifier = ">=2.0.0" },
     { name = "tzdata", specifier = ">=2026.5" },
     { name = "upstash-redis", specifier = ">=1.8.0" },
@@ -972,6 +974,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/66/dd/838cdaccfaa1a5e7b071d4829f160b5026c3fa681e43ba3d8cf46f4cc47a/qh3-2.0.3-cp37-abi3-win32.whl", hash = "sha256:20ceb5482ef6f352d9c7351fbde69f94f49d07f068ce9aa4e88ea76fca7eddda", size = 2025312, upload-time = "2026-09-02T07:56:08.411Z" },
     { url = "https://files.pythonhosted.org/packages/34/43/3a9afd3af08885e88821e2436b5009370fbb54a6eb8c1bbfb3473196a688/qh3-2.0.3-cp37-abi3-win_amd64.whl", hash = "sha256:94ba6ddb786742ff93904db09cb4b6fbcaf7de115161c05918024cd52b2c8a61", size = 2280647, upload-time = "2026-09-02T07:56:09.882Z" },
     { url = "https://files.pythonhosted.org/packages/80/ad/a9b5155783d8905f9954a8224bb5d4b79245c7cc7f2f10b6815b0f1182dd/qh3-2.0.3-cp37-abi3-win_arm64.whl", hash = "sha256:0b13789c68983a994e8c12e3ff0fbc02f07c0aaaeec5670b57802f5d3d555e81", size = 2102935, upload-time = "2026-09-02T07:56:11.43Z" },
+]
+
+[[package]]
+name = "redis"
+version = "8.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/99/604f0b666d4c616d891cf77ebb9db6bb21601344c051aebf1b72b9ff915f/redis-8.1.0.tar.gz", hash = "sha256:6e1a19beef9225c83efd689c7e6b7da2d5215b1f42cd13b7fc3714d0a09c7b25", size = 5254356, upload-time = "2026-07-30T08:51:00.269Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/66/9d/c5731f6e3608663d4d3656fd8d3aecee8b509c3082818f5a13eae925baea/redis-8.1.0-py3-none-any.whl", hash = "sha256:a4fe1aac3d3b3cc791d4b3d5931c5a956045dc951ee74d1c913ee3ac4d2ee9fb", size = 560618, upload-time = "2026-07-30T08:50:58.497Z" },
 ]
 
 [[package]]
