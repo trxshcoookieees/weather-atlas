@@ -23,7 +23,7 @@ export function WeeklyForecast() {
   return loading ? (
     <WeeklyForecastSkeleton />
   ) : (
-    <div className="surface w-full space-y-3.5 rounded-4xl p-6">
+    <div className="w-full space-y-3.5 rounded-4xl surface p-6">
       <div>
         <p className="text-xl font-semibold">7-day Forecast</p>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">
@@ -46,8 +46,9 @@ export function WeeklyForecast() {
               </div>
               <WeatherIcon
                 name={getWeatherIconName(item.weatherCode, current.isDay)}
+                className="hidden sm:block"
               />
-              <span className="ml-12 text-sm">
+              <span className="ml-12 hidden text-sm sm:inline">
                 {getWeatherLabel(item.weatherCode)}
               </span>
               <div className="mr-6 ml-auto inline-flex items-center gap-1 text-sm text-sky-600 dark:text-sky-200">

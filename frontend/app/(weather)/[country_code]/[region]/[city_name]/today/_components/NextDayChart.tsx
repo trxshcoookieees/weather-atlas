@@ -18,7 +18,7 @@ export function NextDayChart() {
   );
 
   return (
-    <div className="surface max-h-max w-full space-y-5 rounded-4xl p-6">
+    <div className="hidden max-h-max w-full space-y-5 rounded-4xl surface p-6 sm:block">
       <div>
         <p className="text-xl font-semibold">Temperature, next 24 hours</p>
         <p className="text-sm text-neutral-600 dark:text-neutral-300">

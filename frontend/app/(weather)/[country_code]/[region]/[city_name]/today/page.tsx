@@ -39,7 +39,7 @@ export default async function Overview() {
       {/*/!* Hourly forecast *!/*/}
       <HourlyForecast />
       {/*/!* 24h & Weekly forecast*!/*/}
-      <section className="flex gap-6">
+      <section className="flex flex-col gap-6 xl:flex-row">
         <NextDayChart />
         <WeeklyForecast />
       </section>
