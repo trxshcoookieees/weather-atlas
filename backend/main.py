@@ -4,7 +4,7 @@ import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.params import Query
 from fastapi.middleware.cors import CORSMiddleware
-from client import redis, fetch_weather, fetch_cities
+from client import redis, fetch_weather, fetch_cities, fetch_city_by_id
 from models import WeatherForecast, CitySearch
 from parsers import (
     parse_location,
@@ -122,3 +122,33 @@ async def get_city(query: str = Query(min_length=2, max_length=100)):
             logger.exception("Failed to cache city search results")
 
     return cities
+
+
+@app.get("/city/{city_id}", response_model=CitySearch)
+async def get_city_by_id(city_id: int):
+    cache_key = f"city:{city_id}"
+
+    try:
+        cached = redis.get(cache_key)
+
+        if cached:
+            if isinstance(cached, bytes):
+                cached = cached.decode("utf-8")
+
+            return CitySearch.model_validate_json(cached)
+    except Exception:
+        logger.exception("Failed to read city cache")
+
+    try:
+        city = fetch_city_by_id(city_id)
+    except requests.RequestException as exc:
+        logger.exception("Open-Meteocity lookup failed")
+        raise HTTPException(
+            status_code=502,
+            detail="City lookup service is unavailable",
+        ) from exc
+
+    try:
+        redis.set(cache_key, json.dumps(city), ex=86400)
+    except Exception:
+        logger.exception("Failed to cache city")

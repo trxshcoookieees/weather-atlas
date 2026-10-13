@@ -15,7 +15,7 @@ import {
 import { compassPoint } from "@/lib/utils";
 import { useWeather } from "@/context/WeatherContext";
 import { useSearchParams } from "next/navigation";
-import { CurrentWeatherSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/CurrentWeatherSkeleton";
+import { CurrentWeatherSkeleton } from "./CurrentWeatherSkeleton";
 
 export function CurrentWeather() {
   const { weather, loading, error } = useWeather();

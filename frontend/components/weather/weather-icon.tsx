@@ -44,6 +44,7 @@ export function WeatherIcon({
       width={size}
       height={size}
       alt={alt}
+      loading="eager"
       className={cn("shrink-0 select-none", className)}
     />
   );

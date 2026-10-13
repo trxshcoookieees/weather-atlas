@@ -93,7 +93,7 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
       params.set("unit", unit);
 
       router.push(
-        `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/today?${params.toString()}`,
+        `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?${params.toString()}`,
         { scroll: false },
       );
     },

@@ -135,8 +135,8 @@ export function Sidebar() {
                   onClick={() => {
                     setActiveCity(city);
                     closeSidebar();
-                    router.push(
-                      `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/today`,
+                    router.replace(
+                      `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${activeCity.id}/today`,
                     );
                   }}
                 >
