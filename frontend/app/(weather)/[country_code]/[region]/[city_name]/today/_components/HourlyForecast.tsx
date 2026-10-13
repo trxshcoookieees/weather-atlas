@@ -23,8 +23,8 @@ export function HourlyForecast() {
   return loading ? (
     <HourlyForecastSkeleton />
   ) : (
-    <section className="surface space-y-4 rounded-4xl p-5.5">
-      <div className="flex items-end justify-between">
+    <section className="space-y-4 rounded-2xl max-sm:-mx-8 sm:rounded-3xl sm:surface sm:p-4 lg:rounded-4xl lg:py-5.5 xl:p-7">
+      <div className="hidden items-end justify-between sm:flex">
         <div>
           <p className="text-xl font-semibold">Hourly forecast</p>
           <p className="text-sm text-neutral-600 dark:text-neutral-300">
@@ -38,7 +38,7 @@ export function HourlyForecast() {
           Full hourly forecast →
         </Link>
       </div>
-      <div className="flex gap-2.5">
+      <div className="flex scrollbar-none gap-2.5 overflow-x-auto max-sm:px-8">
         {hourly
           ?.slice(
             Number(
@@ -52,7 +52,7 @@ export function HourlyForecast() {
             return (
               <div
                 key={`hourly-${i}`}
-                className="w-full max-w-40 space-y-2.5 rounded-3xl px-3 py-3.5"
+                className="w-max shrink-0 space-y-2.5 rounded-xl bg-neutral-700/10 px-3 py-3.5 2xl:px-3 3xl:w-full 3xl:shrink dark:bg-neutral-300/20"
               >
                 <div className="flex items-center justify-between gap-10">
                   <div>

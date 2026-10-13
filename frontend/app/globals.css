@@ -20,13 +20,15 @@
     }
 }
 
+@theme {
+    --breakpoint-3xl: 120rem;
+}
+
 @theme inline {
     --font-sans: var(--font-jakarta);
     --font-mono: var(--font-jetbrains);
 }
 
-@layer components {
-    .surface {
-        @apply shadow-md border-white/30 bg-white/20;
-    }
+@utility surface {
+    @apply shadow-md border-white/30 bg-white/20;
 }
