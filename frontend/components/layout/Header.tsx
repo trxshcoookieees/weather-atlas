@@ -6,7 +6,7 @@ import { CitySearch } from "@/components/ui/CitySearch";
 
 export function Header() {
   return (
-    <header className="sticky top-0 flex items-center justify-between gap-x-8 bg-transparent px-8 py-7 backdrop-blur-md">
+    <header className="top-0 flex items-center justify-between gap-x-8 bg-transparent px-8 py-4 backdrop-blur-md sm:sticky sm:py-7">
       <div className="relative w-full max-w-125">
         <Icon
           icon={Search}
@@ -15,7 +15,7 @@ export function Header() {
         <CitySearch />
       </div>
       <div className="flex items-center gap-4">
-        <div className="surface flex h-10 min-w-max items-center justify-between gap-2 rounded-lg px-3 py-2.5 font-mono text-xs font-medium">
+        <div className="surface hidden h-10 min-w-max items-center justify-between gap-2 rounded-lg px-3 py-2.5 font-mono text-xs font-medium lg:flex">
           <div className="size-1.5 rounded-full bg-green-600 dark:bg-green-400"></div>
           <div className="pr-4">
             <p>Live Open-Meteo</p>

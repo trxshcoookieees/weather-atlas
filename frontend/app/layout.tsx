@@ -56,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${jakarta.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="flex h-full overflow-hidden bg-linear-to-br from-stone-200 from-20% via-stone-300 to-zinc-300 font-sans text-neutral-800 dark:from-gray-600 dark:via-gray-500 dark:to-gray-400 dark:text-neutral-200">
+      <body className="flex h-full flex-col overflow-hidden bg-linear-to-br from-stone-200 from-20% via-stone-300 to-zinc-300 font-sans text-neutral-800 sm:flex-row dark:from-gray-600 dark:via-gray-500 dark:to-gray-400 dark:text-neutral-200">
         {children}
       </body>
     </html>

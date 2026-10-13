@@ -68,7 +68,7 @@ export function Sidebar() {
     <aside
       id="sidebar"
       role="navigation"
-      className="h-full w-60 space-y-4 bg-transparent px-5 py-7"
+      className="hidden h-full w-60 space-y-4 bg-transparent px-5 py-7 lg:block"
     >
       <div className="surface items-center space-y-px rounded-lg p-4">
         <p className="text-xl font-semibold">Weather Atlas</p>
