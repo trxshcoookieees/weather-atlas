@@ -89,8 +89,8 @@ export function CitySearch() {
         type="search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search city or coordinates"
-        className="surface h-10 w-full rounded-lg pr-3 pl-9 text-sm outline-black/10 focus:outline"
+        placeholder="Search city"
+        className="h-10 w-full rounded-lg surface pr-3 pl-9 text-sm outline-black/10 focus:outline"
       />
 
       {isOpen && (
