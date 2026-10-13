@@ -3,40 +3,22 @@
 import { CitySearch } from "@/components/ui/CitySearch";
 import { Icon } from "@/components/ui";
 import { Search } from "lucide-react";
-import { getSavedCities, SavedCity } from "@/lib/weather/saved-cities";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useCity } from "@/context/CityContext";
+import { slugify } from "@/lib/utils";
 
 export function WelcomeClient() {
   const router = useRouter();
-  const [checked, setChecked] = useState<boolean>(false);
+  const { activeCity } = useCity();
 
   useEffect(() => {
-    let cities: SavedCity[] = [];
+    if (!activeCity) return;
 
-    try {
-      cities = getSavedCities();
-      if (!Array.isArray(cities)) cities = [];
-    } catch {
-      cities = [];
-    }
-
-    const activeCityId = localStorage.getItem("active-city-id");
-    const activeCity = cities.find((city) => String(city.id) === activeCityId);
-
-    if (activeCity) {
-      router.replace(
-        `/overview?city=${encodeURIComponent(String(activeCity.id))}`,
-      );
-      return;
-    }
-
-    setChecked(true);
-  }, [router]);
-
-  if (!checked) {
-    return <div aria-label="Loading..."></div>;
-  }
+    router.replace(
+      `/${slugify(activeCity.countryCode)}/${slugify(activeCity.admin1)}/${slugify(activeCity.name)}/today`,
+    );
+  }, [activeCity, router]);
 
   return (
     <div className="text-lg">
