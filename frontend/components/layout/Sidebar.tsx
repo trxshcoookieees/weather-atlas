@@ -4,14 +4,12 @@ import Link from "next/link";
 import {
   CalendarDays,
   ChartNoAxesCombined,
-  CircleHelp,
   LayoutDashboard,
   Map,
   MapPin,
   MapPinHouse,
   MapPinPlus,
   Scale,
-  Settings2,
   Trash,
   Wind,
 } from "lucide-react";
@@ -138,16 +136,6 @@ export function Sidebar() {
             );
           })}
         </ul>
-      </div>
-      <div>
-        <div className="flex h-10 items-center gap-3 px-2">
-          <Icon icon={Settings2} />
-          <span>Settings</span>
-        </div>
-        <div className="flex h-10 items-center gap-3 px-2">
-          <Icon icon={CircleHelp} />
-          <span>Help & Data</span>
-        </div>
       </div>
     </aside>
   );
