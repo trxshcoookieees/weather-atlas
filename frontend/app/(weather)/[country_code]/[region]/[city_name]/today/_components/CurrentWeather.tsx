@@ -51,7 +51,7 @@ export function CurrentWeather() {
     <CurrentWeatherSkeleton />
   ) : (
     <section className="flex min-h-75 flex-col gap-5 xl:flex-row">
-      <div className="surface relative flex w-full flex-col-reverse rounded-2xl p-4 sm:flex-row sm:rounded-3xl sm:p-7 lg:rounded-4xl xl:w-1/2 xl:justify-between 2xl:w-2/3 2xl:pr-32">
+      <div className="relative flex w-full flex-col-reverse rounded-2xl surface p-4 sm:flex-row sm:rounded-3xl sm:p-7 lg:rounded-4xl xl:w-1/2 xl:justify-between 2xl:w-2/3 2xl:pr-32">
         <div className="space-y-3">
           <p className="medium max-w-max text-4xl sm:text-5xl lg:text-7xl">
             {formatTemperature(current.temperature, unit).display}
