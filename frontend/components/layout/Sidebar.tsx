@@ -16,7 +16,7 @@ import {
   Wind,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 import { Icon } from "@/components/ui";
 import { useCity } from "@/context/CityContext";
 
@@ -119,7 +119,7 @@ export function Sidebar() {
                 onClick={() => {
                   setActiveCity(city);
                   router.push(
-                    `/${city.countryCode}/${city.admin1}/${city.name}/today`,
+                    `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/today`,
                   );
                 }}
               >

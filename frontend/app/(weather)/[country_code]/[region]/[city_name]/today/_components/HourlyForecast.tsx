@@ -9,9 +9,10 @@ import { Icon } from "@/components/ui";
 import { Droplets } from "lucide-react";
 import { useWeather } from "@/context/WeatherContext";
 import { useSearchParams } from "next/navigation";
+import { HourlyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/HourlyForecastSkeleton";
 
 export function HourlyForecast() {
-  const { weather } = useWeather();
+  const { weather, loading } = useWeather();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
@@ -19,7 +20,9 @@ export function HourlyForecast() {
 
   const { hourly, current, location } = weather;
 
-  return (
+  return loading ? (
+    <HourlyForecastSkeleton />
+  ) : (
     <section className="surface space-y-4 rounded-4xl p-5.5">
       <div className="flex items-end justify-between">
         <div>
