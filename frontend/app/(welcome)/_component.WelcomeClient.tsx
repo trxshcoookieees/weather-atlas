@@ -3,7 +3,7 @@
 import { CitySearch } from "@/components/ui/CitySearch";
 import { Icon } from "@/components/ui";
 import { Search } from "lucide-react";
-import { useEffect } from "react";
+import {Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCity } from "@/context/CityContext";
 import { slugify } from "@/lib/utils";
@@ -37,7 +37,9 @@ export function WelcomeClient() {
           icon={Search}
           className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2"
         />
-        <CitySearch />
+        <Suspense fallback={<div />}>
+          <CitySearch />
+        </Suspense>
       </div>
     </div>
   );
