@@ -12,17 +12,21 @@ import { useSearchParams } from "next/navigation";
 import { HourlyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/HourlyForecastSkeleton";
 
 export function HourlyForecast() {
-  const { weather, loading } = useWeather();
+  const { weather, loading, error } = useWeather();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
-  if (!weather) return null;
+  if (loading || !weather) {
+    return <HourlyForecastSkeleton />;
+  }
+
+  if (error) {
+    return <p>{error?.message}</p>;
+  }
 
   const { hourly, current, location } = weather;
 
-  return loading ? (
-    <HourlyForecastSkeleton />
-  ) : (
+  return (
     <section className="space-y-4 rounded-2xl max-sm:-mx-8 sm:rounded-3xl sm:surface sm:p-4 lg:rounded-4xl lg:py-5.5 xl:p-7">
       <div className="hidden items-end justify-between sm:flex">
         <div>

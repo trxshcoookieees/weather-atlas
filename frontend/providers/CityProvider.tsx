@@ -69,6 +69,7 @@ export function CityProvider({ children }: { children: React.ReactNode }) {
         setActiveCity,
         saveCity,
         removeCity,
+        isLoaded,
       }}
     >
       {children}

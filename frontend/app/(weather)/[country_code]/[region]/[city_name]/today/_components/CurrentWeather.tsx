@@ -22,12 +22,12 @@ export function CurrentWeather() {
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
-  if (error) {
-    return <p>{error.message}</p>;
+  if (loading || !weather) {
+    return <CurrentWeatherSkeleton />;
   }
 
-  if (!weather) {
-    return null;
+  if (error) {
+    return <p>{error?.message}</p>;
   }
 
   const {
@@ -47,9 +47,7 @@ export function CurrentWeather() {
 
   const currentVisibility = Math.round((today?.visibility ?? 0) / 1000);
 
-  return loading ? (
-    <CurrentWeatherSkeleton />
-  ) : (
+  return (
     <section className="flex min-h-75 flex-col gap-5 xl:flex-row">
       <div className="relative flex w-full flex-col-reverse rounded-2xl surface p-4 sm:flex-row sm:rounded-3xl sm:p-7 lg:rounded-4xl xl:w-1/2 xl:justify-between 2xl:w-2/3 2xl:pr-32">
         <div className="space-y-3">

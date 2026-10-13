@@ -11,18 +11,22 @@ import { useSearchParams } from "next/navigation";
 import { WeeklyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/WeeklyForecastSkeleton";
 
 export function WeeklyForecast() {
-  const { weather, loading } = useWeather();
+  const { weather, loading, error } = useWeather();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
-  if (!weather) return null;
+  if (loading || !weather) {
+    return <WeeklyForecastSkeleton />;
+  }
+
+  if (error) {
+    return <p>{error?.message}</p>;
+  }
 
   const { daily, current, location } = weather;
   const todayKey = parseWeatherDay(current.time, location.timezone).key;
 
-  return loading ? (
-    <WeeklyForecastSkeleton />
-  ) : (
+  return (
     <div className="w-full space-y-3.5 rounded-4xl surface p-6">
       <div>
         <p className="text-xl font-semibold">7-day Forecast</p>

@@ -5,7 +5,7 @@ import { useCity } from "@/context/CityContext";
 import type { WeatherResponse } from "@/lib/weather/types";
 import type { SavedCity } from "@/lib/weather/saved-cities";
 import { getWeatherForecast } from "@/lib/weather/api";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { slugify } from "@/lib/utils";
 
@@ -15,63 +15,82 @@ const STALE = 5 * 60 * 1000;
 export function WeatherProvider({ children }: { children: React.ReactNode }) {
   const { activeCity, setActiveCity } = useCity();
 
-  const [city, setCityState] = useState<SavedCity | null>(activeCity);
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  const requestId = useRef(0);
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
-  const fetchCity = useCallback(async (c: SavedCity) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const cached = CACHE.get(c.id);
-
-      if (cached && Date.now() - cached.t < STALE) {
-        setWeather(cached.data);
-        return;
-      }
-
-      const data = await getWeatherForecast(c.latitude, c.longitude);
-
-      CACHE.set(c.id, { data, t: Date.now() });
-      setWeather(data);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error("Failed to load weather"),
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const cityId = activeCity?.id;
+  const latitude = activeCity?.latitude;
+  const longitude = activeCity?.longitude;
 
   useEffect(() => {
-    setCityState(activeCity);
-  }, [activeCity]);
+    const id = ++requestId.current;
 
-  useEffect(() => {
-    if (!city) {
+    if (cityId == null || latitude == null || longitude == null) {
       setWeather(null);
+      setLoading(false);
+      setError(null);
       return;
     }
 
-    void fetchCity(city);
-  }, [city, fetchCity]);
+    const cached = CACHE.get(cityId);
+
+    if (cached && Date.now() - cached.t < STALE) {
+      setWeather(cached.data);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setWeather(null);
+    setLoading(true);
+    setError(null);
+
+    async function loadWeather() {
+      try {
+        const data = await getWeatherForecast(latitude, longitude);
+
+        if (id !== requestId.current) return;
+
+        if (typeof cityId === "number") {
+          CACHE.set(cityId, { data, t: Date.now() });
+        }
+        setWeather(data);
+      } catch (err) {
+        if (id !== requestId.current) return;
+
+        setError(
+          err instanceof Error ? err : new Error("Failed to load weather"),
+        );
+      } finally {
+        if (id === requestId.current) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadWeather();
+
+    return () => {
+      requestId.current++;
+    };
+  }, [cityId, latitude, longitude]);
 
   const setCity = useCallback(
-    (c: SavedCity) => {
-      setCityState(c);
-      setActiveCity(c);
+    (city: SavedCity) => {
+      setActiveCity(city);
 
       const params = new URLSearchParams(searchParams.toString());
       params.set("unit", unit);
 
       router.push(
-        `/${slugify(c.countryCode)}/${slugify(c.admin1)}/${slugify(c.name)}/today?${params.toString()}`,
+        `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/today?${params.toString()}`,
         { scroll: false },
       );
     },
@@ -79,7 +98,15 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <WeatherContext.Provider value={{ city, weather, loading, error, setCity }}>
+    <WeatherContext.Provider
+      value={{
+        city: activeCity,
+        weather,
+        loading,
+        error,
+        setCity,
+      }}
+    >
       {children}
     </WeatherContext.Provider>
   );
