@@ -9,7 +9,7 @@ import { Icon } from "@/components/ui";
 import { Droplets } from "lucide-react";
 import { useWeather } from "@/context/WeatherContext";
 import { useSearchParams } from "next/navigation";
-import { HourlyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/HourlyForecastSkeleton";
+import { HourlyForecastSkeleton } from "./HourlyForecastSkeleton";
 
 export function HourlyForecast() {
   const { weather, loading, error } = useWeather();

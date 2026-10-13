@@ -3,7 +3,7 @@ import WeatherRefresh from "@/components/weather/WeatherRefresh";
 import { CityInfo } from "@/components/layout";
 import { CityProvider } from "@/providers/CityProvider";
 import { WeatherProvider } from "@/providers/WeatherProvider";
-import {MobileSidebarProvider} from "@/providers/MobileSidebarProvider";
+import { MobileSidebarProvider } from "@/providers/MobileSidebarProvider";
 
 export default function WeatherLayout({ children }: LayoutProps<"/">) {
   return (

@@ -3,7 +3,7 @@
 import { CitySearch } from "@/components/ui/CitySearch";
 import { Icon } from "@/components/ui";
 import { Search } from "lucide-react";
-import {Suspense, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCity } from "@/context/CityContext";
 import { slugify } from "@/lib/utils";
@@ -16,7 +16,7 @@ export function WelcomeClient() {
     if (!activeCity) return;
 
     router.replace(
-      `/${slugify(activeCity.countryCode)}/${slugify(activeCity.admin1)}/${slugify(activeCity.name)}/today`,
+      `/${slugify(activeCity.countryCode)}/${slugify(activeCity.admin1)}/${slugify(activeCity.name)}/${activeCity.id}/today`,
     );
   }, [activeCity, router]);
 

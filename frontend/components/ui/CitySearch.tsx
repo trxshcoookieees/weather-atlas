@@ -123,7 +123,7 @@ export function CitySearch() {
                     admin1: city.admin1,
                   });
                   router.push(
-                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}/today?unit=${unit}`,
+                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
                   );
                   setIsOpen(false);
                 }}

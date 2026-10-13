@@ -69,3 +69,16 @@ export async function getCity(
 
   return response.json();
 }
+
+export async function getCityById(id: number, signal?: AbortSignal): Promise<City> {
+  const response = await fetch(`${API_URL}/city/${id}`, {
+    cache: "no-store",
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch city: ${response.status}`);
+  }
+
+  return response.json();
+}

@@ -8,7 +8,7 @@ import { getWeatherLabel } from "@/lib/weather/weather-descriptions";
 import { Icon } from "@/components/ui";
 import { Droplets } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { WeeklyForecastSkeleton } from "@/app/(weather)/[country_code]/[region]/[city_name]/today/_components/WeeklyForecastSkeleton";
+import { WeeklyForecastSkeleton } from "./WeeklyForecastSkeleton";
 
 export function WeeklyForecast() {
   const { weather, loading, error } = useWeather();
