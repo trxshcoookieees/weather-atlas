@@ -39,6 +39,9 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    const lat = latitude;
+    const lon = longitude;
+
     const cached = CACHE.get(cityId);
 
     if (cached && Date.now() - cached.t < STALE) {
@@ -54,7 +57,7 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
 
     async function loadWeather() {
       try {
-        const data = await getWeatherForecast(latitude, longitude);
+        const data = await getWeatherForecast(lat, lon);
 
         if (id !== requestId.current) return;
 
