@@ -22,12 +22,12 @@ export function CurrentWeather() {
   const searchParams = useSearchParams();
   const unit = searchParams.get("unit") === "F" ? "F" : "C";
 
-  if (error) {
-    return <p>{error.message}</p>;
+  if (loading || !weather) {
+    return <CurrentWeatherSkeleton />;
   }
 
-  if (!weather) {
-    return null;
+  if (error) {
+    return <p>{error?.message}</p>;
   }
 
   const {
@@ -47,41 +47,43 @@ export function CurrentWeather() {
 
   const currentVisibility = Math.round((today?.visibility ?? 0) / 1000);
 
-  return loading ? (
-    <CurrentWeatherSkeleton />
-  ) : (
-    <section className="flex min-h-75 gap-5">
-      <div className="surface flex w-2/3 items-center justify-between rounded-4xl p-7 pr-32">
-        <div className="h-full space-y-3">
-          <p className="medium text-7xl">
+  return (
+    <section className="flex min-h-75 flex-col gap-5 xl:flex-row">
+      <div className="relative flex w-full flex-col-reverse rounded-2xl surface p-4 sm:flex-row sm:rounded-3xl sm:p-7 lg:rounded-4xl xl:w-1/2 xl:justify-between 2xl:w-2/3 2xl:pr-32">
+        <div className="space-y-3">
+          <p className="medium max-w-max text-4xl sm:text-5xl lg:text-7xl">
             {formatTemperature(current.temperature, unit).display}
           </p>
-          <p className="">
-            {`Feels like ${formatTemperature(current.apparentTemperature, unit).display} · `}
+          <p className="max-w-max">
+            <span className="block sm:inline">
+              {`Feels like ${formatTemperature(current.apparentTemperature, unit).display}`}
+            </span>
+            <span className="hidden sm:inline"> · </span>
             <span className="text-neutral-600 dark:text-neutral-300">
               {`High ${formatTemperature(today?.maxTemperature ?? 0, unit).display} / Low ${formatTemperature(today?.minTemperature ?? 0, unit).display}`}
             </span>
           </p>
-          <p className="max-w-3/5">
+          <p className="w-full text-sm sm:max-w-3/5 sm:text-base">
             A fresh, bright afternoon with clouds breaking from the west. A
             brief shower is possible around 17:00.
           </p>
         </div>
-        <div className="cursor-default space-y-2 select-none">
+        <div className="absolute top-4 right-7 cursor-default space-y-2 select-none sm:static">
           <WeatherIcon
             name={getWeatherIconName(current.weatherCode, current.isDay)}
             alt="Partly Cloudy Day"
             size={200}
             variant={"animated"}
+            className="w-24 sm:w-50 2xl:h-50"
           />
-          <div className="mx-auto flex max-h-8 w-max items-center rounded-full border border-neutral-600 px-3 py-2 dark:border-neutral-300">
+          <div className="mx-auto mt-4 hidden max-h-8 w-max items-center rounded-full border border-neutral-600 px-3 py-2 sm:flex dark:border-neutral-300">
             <span className="text-xs font-semibold text-neutral-600 dark:text-neutral-300">
               {getWeatherLabel(current.weatherCode)}
             </span>
           </div>
         </div>
       </div>
-      <div className="grid w-1/3 grid-cols-2 grid-rows-3 gap-3">
+      <div className="grid w-full grid-cols-3 gap-3 xl:w-1/2 xl:grid-cols-2 2xl:w-1/3">
         <WeatherMetric
           icon={Droplets}
           label="Humidity"

@@ -96,7 +96,7 @@ export function parseWeatherDateTime(
     hours,
     minutes,
     time,
-    label: `${datePart} · ${time} ${timezonePart}`,
+    label: `${datePart} ${time} ${timezonePart}`,
   };
 }
 

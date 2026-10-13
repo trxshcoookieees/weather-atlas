@@ -1,12 +1,25 @@
+"use client";
+
 import { Suspense } from "react";
-import { Search } from "lucide-react";
+import { Search, List } from "lucide-react";
 import { TemperatureUnitSwitch } from "@/components/weather";
 import { Icon } from "@/components/ui";
 import { CitySearch } from "@/components/ui/CitySearch";
+import { useMobileSidebar } from "@/context/MobileSidebarContext";
 
 export function Header() {
+  const { openSidebar } = useMobileSidebar();
   return (
-    <header className="sticky top-0 flex items-center justify-between gap-x-8 bg-transparent px-8 py-7 backdrop-blur-md">
+    <header className="top-0 z-50 flex items-center gap-x-2 px-8 py-4 backdrop-blur-md sm:sticky sm:gap-x-8 sm:py-7 lg:justify-between">
+      <button
+        type="button"
+        onClick={openSidebar}
+        aria-label="Open navigation menu"
+        aria-controls="sidebar"
+        className="flex size-10 shrink-0 items-center justify-center rounded-lg surface transition-colors hover:bg-black/5 lg:hidden dark:hover:bg-white/10"
+      >
+        <Icon icon={List} />
+      </button>
       <div className="relative w-full max-w-125">
         <Icon
           icon={Search}
@@ -15,7 +28,7 @@ export function Header() {
         <CitySearch />
       </div>
       <div className="flex items-center gap-4">
-        <div className="surface flex h-10 min-w-max items-center justify-between gap-2 rounded-lg px-3 py-2.5 font-mono text-xs font-medium">
+        <div className="hidden h-10 min-w-max items-center justify-between gap-2 rounded-lg surface px-3 py-2.5 font-mono text-xs font-medium lg:flex">
           <div className="size-1.5 rounded-full bg-green-600 dark:bg-green-400"></div>
           <div className="pr-4">
             <p>Live Open-Meteo</p>
@@ -29,7 +42,7 @@ export function Header() {
         </div>
         <Suspense
           fallback={
-            <div className="surface relative flex h-10 w-18 rounded-lg" />
+            <div className="relative flex h-10 w-18 rounded-lg surface" />
           }
         >
           <TemperatureUnitSwitch />

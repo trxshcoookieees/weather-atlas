@@ -21,11 +21,13 @@ export function CityInfo() {
   }
 
   return (
-    <section className="flex items-center justify-between px-8">
-      <div>
-        <div className="flex items-end gap-2">
-          <span className="text-3xl font-semibold">{activeCity.name}</span>
-          <span className="text-neutral-700 dark:text-neutral-300">
+    <section className="flex items-center px-8 sm:justify-between">
+      <div className="mr-4">
+        <div className="flex flex-col sm:flex-row sm:items-baseline-last">
+          <span className="mr-2 text-xl font-semibold md:text-3xl">
+            {activeCity.name}
+          </span>
+          <span className="md:text-md text-sm text-nowrap text-neutral-700 dark:text-neutral-300">
             {[activeCity.admin1, activeCity.country].filter(Boolean).join(", ")}
           </span>
         </div>

@@ -10,14 +10,16 @@ type WeatherMetricProps = {
 
 export function WeatherMetric(props: WeatherMetricProps): React.ReactNode {
   return (
-    <div className="surface space-y-2.5 rounded-3xl p-4">
-      <div className="mr-auto flex items-center gap-2">
+    <div className="surface space-y-2.5 rounded-2xl p-4 md:rounded-3xl">
+      <div className="mr-auto flex items-center justify-center gap-2 sm:justify-between">
         <Icon icon={props.icon} />
-        <span className="text-sm">{props.label}</span>
+        <span className="hidden text-sm sm:inline">{props.label}</span>
       </div>
-      <div className="mt-auto flex items-center justify-between">
-        <span className="mr-auto text-xl font-semibold">{props.value}</span>
-        <span className="text-sm text-neutral-600 dark:text-neutral-300">
+      <div className="mt-auto flex flex-col items-center justify-center sm:flex-row sm:justify-between">
+        <span className="text-xs font-semibold sm:text-base md:text-xl">
+          {props.value}
+        </span>
+        <span className="hidden text-xs text-neutral-600 sm:inline sm:text-sm dark:text-neutral-300">
           {props.detail}
         </span>
       </div>

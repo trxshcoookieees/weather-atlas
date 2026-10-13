@@ -29,12 +29,12 @@ export function SaveCity(city: SavedCity) {
       <Icon
         icon={Heart}
         className={cn(
-          "stroke-neutral-600 transition-colors dark:stroke-neutral-300",
+          "size-6 stroke-neutral-600 transition-colors sm:size-4.5 dark:stroke-neutral-300",
           isSaved &&
             "fill-rose-500 stroke-rose-500 dark:fill-rose-500 dark:stroke-rose-500",
         )}
       />
-      <span className="w-12 text-sm font-semibold">
+      <span className="hidden w-12 text-sm font-semibold sm:inline">
         {isSaved ? "Saved" : "Save"}
       </span>
     </button>
