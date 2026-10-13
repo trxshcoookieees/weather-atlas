@@ -1,6 +1,13 @@
 import clsx, { type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export function generateWeatherMetadata(cityName: string, regionName: string) {
+  return {
+    title: `${cityName} Weather Forecast`,
+    description: `Check the current weather, hourly forecast, adn 7-day weather outlook for ${cityName}, ${regionName}`,
+  };
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(...inputs));
 }
