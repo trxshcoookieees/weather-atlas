@@ -17,7 +17,7 @@ type WeatherPageProps = {
 };
 
 export function WeatherPage({ geocodingId }: WeatherPageProps) {
-  const { activeCity, setActiveCity, isLoaded } = useCity();
+  const { activeCity, setActiveCity, isLoaded, savedCities } = useCity();
 
   const [error, setError] = useState<Error | null>(null);
 
@@ -29,9 +29,13 @@ export function WeatherPage({ geocodingId }: WeatherPageProps) {
       return;
     }
 
-    if (activeCity?.id === geocodingId) {
+    const isCityInState =
+      activeCity?.id === geocodingId ||
+      savedCities.some((c) => c.id === geocodingId);
+
+    if (isCityInState) {
       setError(null);
-      return;
+      return; // Do nothing cuz we're already on the right page
     }
 
     const controller = new AbortController();
@@ -66,8 +70,6 @@ export function WeatherPage({ geocodingId }: WeatherPageProps) {
         setError(
           error instanceof Error ? error : new Error("Failed to load city"),
         );
-      } finally {
-        //
       }
     }
 
@@ -77,7 +79,7 @@ export function WeatherPage({ geocodingId }: WeatherPageProps) {
       cancelled = true;
       controller.abort();
     };
-  }, [geocodingId, isLoaded, activeCity?.id, setActiveCity]);
+  }, [geocodingId, isLoaded]);
 
   if (error) {
     return <p>Failed to load city: {error.message}</p>;

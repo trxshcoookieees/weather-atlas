@@ -1,10 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export function TemperatureUnitSwitch() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const currentUnit = searchParams.get("unit") === "F" ? "F" : "C";
@@ -12,18 +13,18 @@ export function TemperatureUnitSwitch() {
   const setUnit = (unit: "C" | "F") => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("unit", unit);
-    router.push(`?${params.toString()}`);
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <div
-      className="surface relative flex h-10 w-18 rounded-lg"
+      className="relative flex h-10 w-18 rounded-lg surface"
       role="group"
       aria-label="Temperature unit"
     >
       <div
         className={cn(
-          "surface absolute top-1 left-1 size-8 rounded-md",
+          "absolute top-1 left-1 size-8 rounded-md surface",
           "transition-transform duration-200 ease-out",
           currentUnit === "F" && "translate-x-8",
         )}

@@ -152,3 +152,5 @@ async def get_city_by_id(city_id: int):
         redis.set(cache_key, json.dumps(city), ex=86400)
     except Exception:
         logger.exception("Failed to cache city")
+
+    return city
