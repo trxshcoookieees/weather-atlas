@@ -13,7 +13,7 @@ import {
   Trash,
   Wind,
 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn, slugify } from "@/lib/utils";
 import { Icon } from "@/components/ui";
 import { useCity } from "@/context/CityContext";
@@ -55,6 +55,8 @@ const navigation = [
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const unit = useSearchParams().get("unit") ?? "C";
+
   const { isOpen, closeSidebar } = useMobileSidebar();
   const { activeCity, setActiveCity, savedCities, removeCity } = useCity();
 
@@ -136,7 +138,7 @@ export function Sidebar() {
                     setActiveCity(city);
                     closeSidebar();
                     router.replace(
-                      `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${activeCity.id}/today`,
+                      `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
                     );
                   }}
                 >

@@ -80,8 +80,7 @@ export function CitySearch() {
 
     return () => controller.abort();
   }, [debouncedQuery]);
-  const searchParams = useSearchParams();
-  const unit = searchParams.get("unit") === "F" ? "F" : "C";
+  const unit = useSearchParams().get("unit") ?? "C";
 
   return (
     <div className="relative">
@@ -122,7 +121,7 @@ export function CitySearch() {
                     countryCode: city.country_code,
                     admin1: city.admin1,
                   });
-                  router.push(
+                  router.replace(
                     `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
                   );
                   setIsOpen(false);
