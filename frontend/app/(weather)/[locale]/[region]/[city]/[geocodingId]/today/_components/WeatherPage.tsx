@@ -7,7 +7,7 @@ import { WeeklyForecast } from "./WeeklyForecast";
 import { useCity } from "@/context/CityContext";
 import { useEffect, useState } from "react";
 import { getCityById } from "@/lib/weather/api";
-import { SavedCity } from "@/lib/weather/saved-cities";
+import { City } from "@/lib/weather/types";
 
 type WeatherPageProps = {
   countryCode: string;
@@ -49,14 +49,15 @@ export function WeatherPage({ geocodingId }: WeatherPageProps) {
 
         if (cancelled) return;
 
-        const savedCity: SavedCity = {
+        const savedCity: City = {
           id: city.id,
           name: city.name,
           latitude: city.latitude,
           longitude: city.longitude,
           country: city.country ?? "",
-          countryCode: city.country_code,
-          admin1: city.admin1,
+          region: city.region,
+          locale: city.locale,
+          timezone: city.timezone,
         };
 
         setActiveCity(savedCity);
