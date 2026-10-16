@@ -61,17 +61,17 @@ export function Chart({ data, timezone, unit }: ChartProps) {
               <stop
                 offset="5%"
                 stopColor={"var(--chart-accent)"}
-                stopOpacity={0.5}
+                stopOpacity={0.6}
               />
               <stop
                 offset="50%"
                 stopColor={"var(--chart-accent)"}
-                stopOpacity={0.3}
+                stopOpacity={0.4}
               />
               <stop
                 offset="90%"
                 stopColor={"var(--chart-accent)"}
-                stopOpacity={0.1}
+                stopOpacity={0.2}
               />
             </linearGradient>
           </defs>
@@ -116,6 +116,7 @@ export function Chart({ data, timezone, unit }: ChartProps) {
             fillOpacity={1}
             dot={false}
             activeDot={false}
+            baseValue="dataMin"
           />
           <Line
             yAxisId="temperature"
@@ -124,9 +125,11 @@ export function Chart({ data, timezone, unit }: ChartProps) {
             dot={false}
             activeDot={{
               r: 4,
-              fill: "#00a6f470",
+              fill: "var(--chart-accent)",
             }}
-            strokeWidth={0}
+            strokeWidth={1.25}
+            stroke="var(--chart-accent)"
+            strokeOpacity="0.6"
           />
         </ComposedChart>
       </ResponsiveContainer>
