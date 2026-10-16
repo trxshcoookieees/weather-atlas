@@ -8,8 +8,8 @@ from openmeteo_sdk.WeatherApiResponse import WeatherApiResponse
 
 from models import (
     CurrentWeather,
-    HourlyWeather,
     DailyWeather,
+    HourlyWeather,
     Location,
 )
 
@@ -34,10 +34,23 @@ def parse_current(data: VariablesWithTime, timezone: ZoneInfo) -> CurrentWeather
 
 
 def parse_hourly(data: VariablesWithTime, timezone: ZoneInfo) -> list[HourlyWeather]:
-    weather_codes, temperatures, apparent_temperatures, precipitation_probabilities, precipitations, humidities, cloud_covers, pressures, wind_directions, wind_speeds, wind_gusts, uv_indexes, sunshine_durations, visibilities, is_days = (
-        values(data, i)
-        for i in range(15)
-    )
+    (
+        weather_codes,
+        temperatures,
+        apparent_temperatures,
+        precipitation_probabilities,
+        precipitations,
+        humidities,
+        cloud_covers,
+        pressures,
+        wind_directions,
+        wind_speeds,
+        wind_gusts,
+        uv_indexes,
+        sunshine_durations,
+        visibilities,
+        is_days,
+    ) = (values(data, i) for i in range(15))
 
     return [
         HourlyWeather(
@@ -63,10 +76,28 @@ def parse_hourly(data: VariablesWithTime, timezone: ZoneInfo) -> list[HourlyWeat
 
 
 def parse_daily(data: VariablesWithTime, timezone: ZoneInfo) -> list[DailyWeather]:
-    weather_codes, max_temperatures, min_temperatures, max_apparent_temperatures, min_apparent_temperatures, precipitation_probabilities, precipitations, humidities, cloud_covers, avg_pressures_msl, max_pressures_msl, min_pressures_msl, wind_directions, wind_speeds, wind_gusts, uv_indexes, moon_phases, daylight_durations, sunlight_durations, visibilities = (
-        values(data, i)
-        for i in range(20)
-    )
+    (
+        weather_codes,
+        max_temperatures,
+        min_temperatures,
+        max_apparent_temperatures,
+        min_apparent_temperatures,
+        precipitation_probabilities,
+        precipitations,
+        humidities,
+        cloud_covers,
+        avg_pressures_msl,
+        max_pressures_msl,
+        min_pressures_msl,
+        wind_directions,
+        wind_speeds,
+        wind_gusts,
+        uv_indexes,
+        moon_phases,
+        daylight_durations,
+        sunlight_durations,
+        visibilities,
+    ) = (values(data, i) for i in range(20))
 
     sunrises = int64_values(data, 20)
     sunsets = int64_values(data, 21)

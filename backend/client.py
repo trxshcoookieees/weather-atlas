@@ -1,12 +1,11 @@
 import os
 
-from dotenv import load_dotenv
-from upstash_redis import Redis as UpstashRedis
-from redis import Redis as LocalRedis
-
 import openmeteo_requests
 import requests
+from dotenv import load_dotenv
+from redis import Redis as LocalRedis
 from retry_requests import retry
+from upstash_redis import Redis as UpstashRedis
 
 OPENMETEO_URL = "https://api.open-meteo.com/v1/forecast"
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -97,7 +96,7 @@ def fetch_weather(latitude: float, longitude: float):
         ],
         "wind_speed_unit": "ms",
         "timezone": "auto",
-        "past_days": 1
+        "past_days": 1,
     }
 
     return openmeteo.weather_api(

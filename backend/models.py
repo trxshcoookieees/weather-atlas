@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Location(BaseModel):
@@ -24,7 +24,7 @@ class CurrentWeather(BaseModel):
     apparentTemperature: int
     precipitation: float | int
     humidity: int
-    cloudCover: float
+    cloudCover: float | int
     pressureMsl: int
     windDirection: int
     windSpeed: int
@@ -40,7 +40,7 @@ class HourlyWeather(BaseModel):
     precipitationProbability: int
     precipitation: float | int
     humidity: int
-    cloudCover: float
+    cloudCover: float | int
     pressureMsl: int
     windDirection: int
     windSpeed: int
@@ -61,7 +61,7 @@ class DailyWeather(BaseModel):
     precipitationProbability: int
     precipitation: float | int
     humidity: int
-    cloudCover: float
+    cloudCover: float | int
     avgPressureMsl: int
     maxPressureMsl: int
     minPressureMsl: int
@@ -71,7 +71,7 @@ class DailyWeather(BaseModel):
     uvIndex: int
     sunrise: datetime
     sunset: datetime
-    moonPhase: float
+    moonPhase: float | int
     moonRise: datetime | None
     moonSet: datetime | None
     daylightDuration: int
@@ -80,24 +80,13 @@ class DailyWeather(BaseModel):
 
 
 class CitySearch(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: int
     name: str
-    latitude: float
-    longitude: float
-    timezone: str
-    country_code: str
+    latitude: float | int
+    longitude: float | int
     country: str | None = None
-
-    elevation: float | None = None
-    feature_code: str | None = None
-    country_id: int | None = None
-    population: int | None = None
-    postcodes: list[str] | None = None
-    admin1: str | None = None
-    admin2: str | None = None
-    admin3: str | None = None
-    admin4: str | None = None
-    admin1_id: int | None = None
-    admin2_id: int | None = None
-    admin3_id: int | None = None
-    admin4_id: int | None = None
+    region: str | None = Field(default=None, validation_alias="admin1")
+    locale: str = Field(validation_alias="country_code")
+    timezone: str
