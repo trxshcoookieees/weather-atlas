@@ -90,10 +90,10 @@ export type WeatherResponse = {
 export type City = {
   id: number;
   name: string;
-  country?: string;
-  country_code: string;
-  admin1: string;
-  latitude: number;
   longitude: number;
+  latitude: number;
+  country: string | null;
+  region: string;
+  locale: string;
   timezone: string;
 };

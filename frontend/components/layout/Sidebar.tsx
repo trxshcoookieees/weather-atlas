@@ -138,7 +138,7 @@ export function Sidebar() {
                     setActiveCity(city);
                     closeSidebar();
                     router.replace(
-                      `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
+                      `/${slugify(city.locale)}/${slugify(city.region)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
                     );
                   }}
                 >

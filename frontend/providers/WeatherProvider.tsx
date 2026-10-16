@@ -3,7 +3,7 @@
 import { WeatherContext } from "@/context/WeatherContext";
 import { useCity } from "@/context/CityContext";
 import type { WeatherResponse } from "@/lib/weather/types";
-import type { SavedCity } from "@/lib/weather/saved-cities";
+import type { City } from "@/lib/weather/types";
 import { getWeatherForecast } from "@/lib/weather/api";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -86,14 +86,14 @@ export function WeatherProvider({ children }: { children: React.ReactNode }) {
   }, [cityId, latitude, longitude]);
 
   const setCity = useCallback(
-    (city: SavedCity) => {
+    (city: City) => {
       setActiveCity(city);
 
       const params = new URLSearchParams(searchParams.toString());
       params.set("unit", unit);
 
       router.push(
-        `/${slugify(city.countryCode)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?${params.toString()}`,
+        `/${slugify(city.locale)}/${slugify(city.region)}/${slugify(city.name)}/${city.id}/today?${params.toString()}`,
         { scroll: false },
       );
     },

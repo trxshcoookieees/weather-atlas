@@ -2,14 +2,14 @@
 
 import { createContext, useContext } from "react";
 import type { WeatherResponse } from "@/lib/weather/types";
-import { SavedCity } from "@/lib/weather/saved-cities";
+import { City } from "@/lib/weather/types";
 
 type WeatherContextValue = {
-  city: SavedCity | null;
+  city: City | null;
   weather: WeatherResponse | null;
   loading: boolean;
   error: Error | null;
-  setCity: (c: SavedCity) => void;
+  setCity: (c: City) => void;
 };
 
 export const WeatherContext = createContext<WeatherContextValue | null>(null);

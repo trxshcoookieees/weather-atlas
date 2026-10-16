@@ -56,7 +56,7 @@ export async function getCity(
   signal?: AbortSignal,
 ): Promise<City[]> {
   const response = await fetch(
-    `${API_URL}/city?query=${encodeURIComponent(query)}`,
+    `${API_URL}/cities?city_name=${encodeURIComponent(query)}`,
     {
       cache: "no-store",
       signal,
@@ -70,7 +70,10 @@ export async function getCity(
   return response.json();
 }
 
-export async function getCityById(id: number, signal?: AbortSignal): Promise<City> {
+export async function getCityById(
+  id: number,
+  signal?: AbortSignal,
+): Promise<City> {
   const response = await fetch(`${API_URL}/city/${id}`, {
     cache: "no-store",
     signal,

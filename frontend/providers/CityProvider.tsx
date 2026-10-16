@@ -8,14 +8,14 @@ import {
   setActiveCity as setActiveCityInStorage,
   removeCity as removeCityFromStorage,
   CHANGE_EVENT,
-  type SavedCity,
 } from "@/lib/weather/saved-cities";
 import { useCallback, useEffect, useState } from "react";
+import { City } from "@/lib/weather/types";
 
 export function CityProvider({ children }: { children: React.ReactNode }) {
-  const [activeCity, setActiveCityState] = useState<SavedCity | null>(null);
+  const [activeCity, setActiveCityState] = useState<City | null>(null);
 
-  const [savedCities, setSavedCitiesState] = useState<SavedCity[]>([]);
+  const [savedCities, setSavedCitiesState] = useState<City[]>([]);
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -40,13 +40,13 @@ export function CityProvider({ children }: { children: React.ReactNode }) {
     };
   }, [syncCities]);
 
-  const setActiveCity = useCallback((city: SavedCity) => {
+  const setActiveCity = useCallback((city: City) => {
     setActiveCityInStorage(city);
     setActiveCityState(city);
   }, []);
 
   const saveCity = useCallback(
-    (city: SavedCity) => {
+    (city: City) => {
       saveCityToStorage(city);
       syncCities();
     },

@@ -2,14 +2,14 @@
 
 import { Icon } from "@/components/ui/icon";
 import { Heart } from "lucide-react";
-import type { SavedCity } from "@/lib/weather/saved-cities";
+import type { City } from "@/lib/weather/types";
 import { useCity } from "@/context/CityContext";
 import { cn } from "@/lib/utils";
 
-export function SaveCity(city: SavedCity) {
+export function SaveCity(city: City) {
   const { saveCity, removeCity, savedCities } = useCity();
 
-  const isSaved = savedCities.some((c: SavedCity) => c.id === city.id);
+  const isSaved = savedCities.some((c: City) => c.id === city.id);
 
   const handleClick = () => {
     if (isSaved) {

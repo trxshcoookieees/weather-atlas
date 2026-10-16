@@ -28,7 +28,7 @@ export function CityInfo() {
             {activeCity.name}
           </span>
           <span className="md:text-md text-sm text-nowrap text-neutral-700 dark:text-neutral-300">
-            {[activeCity.admin1, activeCity.country].filter(Boolean).join(", ")}
+            {[activeCity.region, activeCity.country].filter(Boolean).join(", ")}
           </span>
         </div>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">{`Last update at ${lastUpdate}`}</p>
@@ -38,9 +38,10 @@ export function CityInfo() {
         name={activeCity.name}
         latitude={activeCity.latitude}
         longitude={activeCity.longitude}
-        admin1={activeCity.admin1}
         country={activeCity.country}
-        countryCode={activeCity.countryCode}
+        region={activeCity.region}
+        locale={activeCity.locale}
+        timezone={activeCity.timezone}
       />
     </section>
   );

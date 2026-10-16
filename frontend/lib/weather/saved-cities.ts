@@ -1,27 +1,19 @@
-export type SavedCity = {
-  id: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  country?: string;
-  countryCode: string;
-  admin1: string;
-};
+import { City } from "@/lib/weather/types";
 
 const SAVED_CITIES_STORAGE_KEY = "wa:saved-cities";
 const ACTIVE_CITY_STORAGE_KEY = "wa:active-city";
 const CHANGE_EVENT = "saved-cities-changed";
 
-export function getSavedCities(): SavedCity[] {
+export function getSavedCities(): City[] {
   try {
     const value = localStorage.getItem(SAVED_CITIES_STORAGE_KEY);
-    return value ? (JSON.parse(value) as SavedCity[]) : [];
+    return value ? (JSON.parse(value) as City[]) : [];
   } catch {
     return [];
   }
 }
 
-export function saveCity(city: SavedCity) {
+export function saveCity(city: City) {
   const cities = getSavedCities();
 
   if (cities.some((c) => c.id === city.id)) return;
@@ -34,12 +26,12 @@ export function saveCity(city: SavedCity) {
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-export function setActiveCity(city: SavedCity) {
+export function setActiveCity(city: City) {
   localStorage.setItem(ACTIVE_CITY_STORAGE_KEY, JSON.stringify(city));
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-export function getActiveCity(): SavedCity {
+export function getActiveCity(): City {
   const city = localStorage.getItem(ACTIVE_CITY_STORAGE_KEY);
 
   if (!city) {
@@ -47,7 +39,7 @@ export function getActiveCity(): SavedCity {
   }
 
   try {
-    return JSON.parse(city) as SavedCity;
+    return JSON.parse(city) as City;
   } catch {
     throw new Error("Active city contains invalid JSON.");
   }
