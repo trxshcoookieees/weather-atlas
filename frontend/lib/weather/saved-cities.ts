@@ -2,7 +2,6 @@ import { City } from "@/lib/weather/types";
 
 const SAVED_CITIES_STORAGE_KEY = "wa:saved-cities";
 const ACTIVE_CITY_STORAGE_KEY = "wa:active-city";
-const CHANGE_EVENT = "saved-cities-changed";
 
 export function getSavedCities(): City[] {
   try {
@@ -22,13 +21,10 @@ export function saveCity(city: City) {
     SAVED_CITIES_STORAGE_KEY,
     JSON.stringify([...cities, city]),
   );
-
-  window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
 export function setActiveCity(city: City) {
   localStorage.setItem(ACTIVE_CITY_STORAGE_KEY, JSON.stringify(city));
-  window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
 export function getActiveCity(): City {
@@ -49,7 +45,4 @@ export function removeCity(id: number) {
   const cities = getSavedCities().filter((c) => c.id !== id);
 
   localStorage.setItem(SAVED_CITIES_STORAGE_KEY, JSON.stringify(cities));
-  window.dispatchEvent(new Event(CHANGE_EVENT));
 }
-
-export { CHANGE_EVENT };

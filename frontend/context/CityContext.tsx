@@ -10,6 +10,8 @@ type CityContextValue = {
   saveCity: (city: City) => void;
   removeCity: (id: number) => void;
   isLoaded: boolean;
+  isCityResolved: boolean;
+  cityResolutionError: Error | null;
 };
 
 export const CityContext = createContext<CityContextValue | null>(null);

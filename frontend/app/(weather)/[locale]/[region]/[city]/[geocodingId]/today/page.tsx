@@ -27,15 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return generateWeatherMetadata(name, regionName);
 }
 
-export default async function Overview({ params }: Props) {
-  const { countryCode, region, city, geocodingId } = await params;
-
-  return (
-    <WeatherPage
-      geocodingId={Number(geocodingId)}
-      countryCode={countryCode}
-      region={region}
-      city={city}
-    />
-  );
+export default async function Overview() {
+  return <WeatherPage />;
 }
