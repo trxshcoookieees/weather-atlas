@@ -12,3 +12,15 @@ dependencies = [
     "tzdata>=2026.5",
     "upstash-redis>=1.8.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]

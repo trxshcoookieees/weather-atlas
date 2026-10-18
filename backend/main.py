@@ -1,20 +1,21 @@
+import json
+import logging
+from typing import Annotated
 from zoneinfo import ZoneInfo
 
 import requests
 from fastapi import FastAPI, HTTPException
-from fastapi.params import Query
 from fastapi.middleware.cors import CORSMiddleware
-from client import redis, fetch_weather, fetch_cities, fetch_city_by_id
-from models import WeatherForecast, CitySearch
-from parsers import (
-    parse_location,
-    parse_current,
-    parse_hourly,
-    parse_daily,
-)
+from fastapi.params import Path, Query
 
-import json
-import logging
+from client import fetch_cities, fetch_city_by_id, fetch_weather, redis
+from models import CitySearch, WeatherForecast
+from parsers import (
+    parse_current,
+    parse_daily,
+    parse_hourly,
+    parse_location,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,9 +32,9 @@ app.add_middleware(
 
 @app.get("/forecast", response_model=WeatherForecast)
 async def get_weather(
-        latitude: float,
-        longitude: float,
-):
+    latitude: Annotated[float, Query(ge=-90, le=90)],
+    longitude: Annotated[float, Query(ge=-180, le=180)],
+) -> WeatherForecast:
     cache_key = f"forecast:{latitude:.4f}:{longitude:.4f}"
 
     try:
@@ -50,7 +51,7 @@ async def get_weather(
             forecast = WeatherForecast.model_validate_json(cached)
             logger.info("Cache HIT: %s", cache_key)
             return forecast
-        except (ValueError, TypeError):
+        except ValueError, TypeError:
             logger.warning("Invalid cache entry: %s", cache_key)
 
     logger.info("Cache MISS: %s", cache_key)
@@ -85,9 +86,11 @@ async def get_weather(
     return forecast
 
 
-@app.get("/city", response_model=list[CitySearch])
-async def get_city(query: str = Query(min_length=2, max_length=100)):
-    normalized_query = " ".join(query.split()).casefold()
+@app.get("/cities", response_model=list[CitySearch])
+async def get_city(
+    city_name: Annotated[str, Query(min_length=2, max_length=50)],
+) -> list[CitySearch]:
+    normalized_query = " ".join(city_name.split()).casefold()
     cache_key = f"city:{normalized_query}"
 
     try:
@@ -125,7 +128,9 @@ async def get_city(query: str = Query(min_length=2, max_length=100)):
 
 
 @app.get("/city/{city_id}", response_model=CitySearch)
-async def get_city_by_id(city_id: int):
+async def get_city_by_id(
+    city_id: Annotated[int, Path(description="ID of the city in Geocoding API")],
+) -> CitySearch:
     cache_key = f"city:{city_id}"
 
     try:
@@ -135,7 +140,7 @@ async def get_city_by_id(city_id: int):
             if isinstance(cached, bytes):
                 cached = cached.decode("utf-8")
 
-            return CitySearch.model_validate_json(cached)
+            return CitySearch.model_validate_json(cached, by_alias=True)
     except Exception:
         logger.exception("Failed to read city cache")
 

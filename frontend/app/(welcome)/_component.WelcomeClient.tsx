@@ -16,7 +16,7 @@ export function WelcomeClient() {
     if (!activeCity) return;
 
     router.replace(
-      `/${slugify(activeCity.countryCode)}/${slugify(activeCity.admin1)}/${slugify(activeCity.name)}/${activeCity.id}/today?unit=C`,
+      `/${slugify(activeCity.locale)}/${slugify(activeCity.region)}/${slugify(activeCity.name)}/${activeCity.id}/today?unit=C`,
     );
   }, [activeCity, router]);
 

@@ -118,11 +118,12 @@ export function CitySearch() {
                     latitude: city.latitude,
                     longitude: city.longitude,
                     country: city.country,
-                    countryCode: city.country_code,
-                    admin1: city.admin1,
+                    region: city.region,
+                    locale: city.locale,
+                    timezone: city.timezone,
                   });
                   router.replace(
-                    `/${slugify(city.country_code)}/${slugify(city.admin1)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
+                    `/${slugify(city.locale)}/${slugify(city.region)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
                   );
                   setIsOpen(false);
                 }}
@@ -133,7 +134,7 @@ export function CitySearch() {
                   className="w-full px-4 py-3 text-left text-sm hover:bg-black/5 dark:hover:bg-white/5"
                 >
                   <span className="font-medium">{city.name}</span>
-                  {city.admin1 && <span>, {city.admin1}</span>}
+                  {city.region && <span>, {city.region}</span>}
                   {city.country && <span>, {city.country}</span>}
                 </button>
               </li>

@@ -1,15 +1,17 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { SavedCity } from "@/lib/weather/saved-cities";
+import type { City } from "@/lib/weather/types";
 
 type CityContextValue = {
-  activeCity: SavedCity | null;
-  savedCities: SavedCity[];
-  setActiveCity: (city: SavedCity) => void;
-  saveCity: (city: SavedCity) => void;
+  activeCity: City | null;
+  savedCities: City[];
+  setActiveCity: (city: City) => void;
+  saveCity: (city: City) => void;
   removeCity: (id: number) => void;
   isLoaded: boolean;
+  isCityResolved: boolean;
+  cityResolutionError: Error | null;
 };
 
 export const CityContext = createContext<CityContextValue | null>(null);
