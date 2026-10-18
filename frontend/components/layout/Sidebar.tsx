@@ -13,7 +13,7 @@ import {
   Trash,
   Wind,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icon } from "@/components/ui";
 import { useCity } from "@/context/CityContext";
@@ -21,19 +21,22 @@ import { useWeather } from "@/context/WeatherContext";
 import { useMobileSidebar } from "@/context/MobileSidebarContext";
 
 const navigation = [
-  { label: "Overview", href: "/", icon: LayoutDashboard },
-  { label: "Forecast", href: "#", icon: CalendarDays },
-  { label: "Historical", href: "#", icon: ChartNoAxesCombined },
-  { label: "Map", href: "#", icon: Map },
-  { label: "Compare", href: "#", icon: Scale },
-  { label: "Air Quality", href: "#", icon: Wind },
+  { label: "Overview", href: "today", icon: LayoutDashboard },
+  { label: "Forecast", href: "forecast", icon: CalendarDays },
+  { label: "Historical", href: "history", icon: ChartNoAxesCombined },
+  { label: "Map", href: "map", icon: Map },
+  { label: "Compare", href: "compare", icon: Scale },
+  { label: "Air Quality", href: "air-quality", icon: Wind },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const { isOpen, closeSidebar } = useMobileSidebar();
   const { activeCity, savedCities, removeCity } = useCity();
   const { setCity } = useWeather();
+  const current = pathname.split("/").pop();
 
   return (
     <>
@@ -72,15 +75,11 @@ export function Sidebar() {
         </div>
         <nav>
           {navigation.map((item) => {
-            const isActive =
-              item.href !== "#" &&
-              (item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href));
+            const isActive = item.href === current;
 
             return (
               <Link
-                href={item.href}
+                href={`${item.href}?${searchParams.toString()}`}
                 key={item.label}
                 onClick={closeSidebar}
                 className={cn(

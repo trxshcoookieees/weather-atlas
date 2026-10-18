@@ -27,6 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return generateWeatherMetadata(name, regionName);
 }
 
-export default async function Overview() {
+export default async function Today() {
   return <WeatherPage />;
 }
