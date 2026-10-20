@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, time
 from math import ceil
 from zoneinfo import ZoneInfo
 
@@ -106,7 +106,7 @@ def parse_daily(data: VariablesWithTime, timezone: ZoneInfo) -> list[DailyWeathe
 
     return [
         DailyWeather(
-            time=get_time(data, i, timezone),
+            time=get_daily_time(data, i, timezone),
             weatherCode=int(weather_codes[i]),
             maxTemperature=round(max_temperatures[i]),
             minTemperature=round(min_temperatures[i]),
@@ -161,4 +161,23 @@ def get_time(data, index: int, timezone: ZoneInfo) -> datetime:
     return datetime.fromtimestamp(
         data.Time() + index * data.Interval(),
         tz=timezone,
+    )
+
+
+def get_daily_time(
+        data,
+        index: int,
+        timezone: ZoneInfo,
+) -> datetime:
+    start_date = datetime.fromtimestamp(
+        data.Time(),
+        tz=timezone,
+    ).date()
+
+    day = start_date + timedelta(days=index)
+
+    return datetime.combine(
+        day,
+        time.min,
+        tzinfo=timezone,
     )
