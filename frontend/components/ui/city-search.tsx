@@ -57,10 +57,13 @@ export function CitySearch() {
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/cities?q=${encodeURIComponent(debouncedQuery)}`,
-          { signal: controller.signal },
-        );
+        const params = new URLSearchParams({
+          city_name: debouncedQuery,
+        });
+
+        const response = await fetch(`/api/cities?${params}`, {
+          signal: controller.signal,
+        });
 
         if (!response.ok) {
           setError("City search failed");
