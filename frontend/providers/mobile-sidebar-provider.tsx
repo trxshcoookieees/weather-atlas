@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { MobileSidebarContext } from "@/context/MobileSidebarContext";
+import React, { useCallback, useEffect, useState } from "react";
+import { MobileSidebarContext } from "@/context/mobile-sidebar-context";
 
 export function MobileSidebarProvider({
   children,
