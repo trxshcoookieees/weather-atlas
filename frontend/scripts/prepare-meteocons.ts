@@ -1,5 +1,5 @@
 import type { Page } from "playwright";
-import type { WeatherIconName } from "@/components/weather";
+import type { WeatherIconName } from "@/components/weather/weather-icon";
 import { chromium } from "playwright";
 import fs from "node:fs/promises";
 import path from "node:path";

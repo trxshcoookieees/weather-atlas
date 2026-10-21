@@ -1,25 +1,9 @@
-"use client";
-
-import { CitySearch } from "@/components/ui/CitySearch";
-import { Icon } from "@/components/ui";
+import { CitySearch } from "@/components/ui/city-search";
+import { Icon } from "@/components/ui/icon";
 import { Search } from "lucide-react";
-import { Suspense, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useCity } from "@/context/CityContext";
-import { slugify } from "@/lib/utils";
+import { Suspense } from "react";
 
 export function WelcomeClient() {
-  const router = useRouter();
-  const { activeCity } = useCity();
-
-  useEffect(() => {
-    if (!activeCity) return;
-
-    router.replace(
-      `/${slugify(activeCity.locale)}/${slugify(activeCity.region)}/${slugify(activeCity.name)}/${activeCity.id}/today?unit=C`,
-    );
-  }, [activeCity, router]);
-
   return (
     <div className="text-lg">
       <h1 className="mb-8 text-4xl font-semibold">Weather Atlas</h1>

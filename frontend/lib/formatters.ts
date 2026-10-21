@@ -102,7 +102,7 @@ export function parseWeatherDateTime(
 
 export function formatTemperature(
   value: number,
-  unit: "C" | "F" = "C",
+  unit: "C" | "F",
 ): {
   value: number;
   display: string;
