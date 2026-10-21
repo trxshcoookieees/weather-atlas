@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getCity } from "@/lib/weather/api";
 import { City } from "@/lib/weather/types";
-import { useRouter, useSearchParams } from "next/navigation";
-import { setActiveCity } from "@/lib/weather/saved-cities";
+import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/utils";
 
 export function CitySearch() {
@@ -59,7 +57,19 @@ export function CitySearch() {
       setError(null);
 
       try {
-        const cities = await getCity(debouncedQuery, controller.signal);
+        const response = await fetch(
+          `/api/cities?q=${encodeURIComponent(debouncedQuery)}`,
+          { signal: controller.signal },
+        );
+
+        if (!response.ok) {
+          setError("City search failed");
+          setCities([]);
+          setIsOpen(false);
+          return;
+        }
+
+        const cities: City[] = await response.json();
 
         setCities(cities);
         setIsOpen(true);
@@ -76,11 +86,10 @@ export function CitySearch() {
         }
       }
     }
-    searchCities();
+    void searchCities();
 
     return () => controller.abort();
   }, [debouncedQuery]);
-  const unit = useSearchParams().get("unit") ?? "C";
 
   return (
     <div className="relative">
@@ -112,18 +121,8 @@ export function CitySearch() {
               <li
                 key={city.id}
                 onClick={() => {
-                  setActiveCity({
-                    id: city.id,
-                    name: city.name,
-                    latitude: city.latitude,
-                    longitude: city.longitude,
-                    country: city.country,
-                    region: city.region,
-                    locale: city.locale,
-                    timezone: city.timezone,
-                  });
                   router.replace(
-                    `/${slugify(city.locale)}/${slugify(city.region)}/${slugify(city.name)}/${city.id}/today?unit=${unit}`,
+                    `/${slugify(city.locale)}/${slugify(city.region)}/${slugify(city.name)}/${city.id}/today`,
                   );
                   setIsOpen(false);
                 }}

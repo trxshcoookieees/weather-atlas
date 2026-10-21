@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
-import { Icon } from "@/components/ui";
+import { Icon } from "@/components/ui/icon";
+import React from "react";
 
 type WeatherMetricProps = {
   icon: LucideIcon;
@@ -10,7 +11,7 @@ type WeatherMetricProps = {
 
 export function WeatherMetric(props: WeatherMetricProps): React.ReactNode {
   return (
-    <div className="surface space-y-2.5 rounded-2xl p-4 md:rounded-3xl">
+    <div className="space-y-2.5 rounded-2xl surface p-4 md:rounded-3xl">
       <div className="mr-auto flex items-center justify-center gap-2 sm:justify-between">
         <Icon icon={props.icon} />
         <span className="hidden text-sm sm:inline">{props.label}</span>

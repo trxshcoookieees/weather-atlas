@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 type WeatherRefreshProps = {
   children: React.ReactNode;
@@ -24,8 +24,10 @@ export default function WeatherRefresh({ children }: WeatherRefreshProps) {
       const ms = now.getMilliseconds();
 
       // Find next 15-minute mark: 0, 15, 30, 45
-      const nextIntervalMinutes = Math.ceil((minutes * 60 + seconds * 1000 + ms) / (15 * 60 * 1000)) * 15;
-      const minutesUntilNext = nextIntervalMinutes - (minutes * 60 + seconds + ms / 1000);
+      const nextIntervalMinutes =
+        Math.ceil((minutes * 60 + seconds * 1000 + ms) / (15 * 60 * 1000)) * 15;
+      const minutesUntilNext =
+        nextIntervalMinutes - (minutes * 60 + seconds + ms / 1000);
 
       // Calculate ms until next interval
       const msUntilNext = minutesUntilNext * 60 * 1000;
@@ -35,9 +37,12 @@ export default function WeatherRefresh({ children }: WeatherRefreshProps) {
         router.refresh();
 
         // Then set interval for every 15 minutes
-        intervalRef.current = setInterval(() => {
-          router.refresh();
-        }, 15 * 60 * 1000);
+        intervalRef.current = setInterval(
+          () => {
+            router.refresh();
+          },
+          15 * 60 * 1000,
+        );
       }, msUntilNext);
     };
 

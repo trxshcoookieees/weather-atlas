@@ -3,7 +3,7 @@
 import { Icon } from "@/components/ui/icon";
 import { Heart } from "lucide-react";
 import type { City } from "@/lib/weather/types";
-import { useCity } from "@/context/CityContext";
+import { useCity } from "@/context/city-context";
 import { cn } from "@/lib/utils";
 
 export function SaveCity(city: City) {
@@ -21,7 +21,7 @@ export function SaveCity(city: City) {
 
   return (
     <button
-      aria-label="Save City"
+      aria-label={isSaved ? "Saved city" : "Save city"}
       className="flex cursor-pointer items-center gap-2"
       onClick={handleClick}
       type="button"
