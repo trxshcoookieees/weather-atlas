@@ -96,7 +96,3 @@ export function getUVILabel(uvi: number): string {
   if (uvi < 11) return `${uvi} Very high`;
   return `${uvi} Extreme`;
 }
-
-export function getWindLabel(degrees: number): string {
-  return "what";
-}

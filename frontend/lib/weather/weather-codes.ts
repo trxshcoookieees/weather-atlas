@@ -1,4 +1,4 @@
-import type { WeatherIconName } from "@/components/weather";
+import type { WeatherIconName } from "@/components/weather/weather-icon";
 
 const WMO_CODES = [
   0, 1, 2, 3, 45, 48, 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77,
