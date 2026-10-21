@@ -29,7 +29,7 @@ export default function WeatherLayout({ children }: LayoutProps<"/">) {
           <main className="relative mx-auto flex h-full w-full min-w-0 flex-1 flex-col overflow-y-auto">
             <Header />
             <WeatherRefresh>
-              <div className="space-y-6 px-8 pb-8">{children}</div>
+              <div className="space-y-6 px-4 pb-8 lg:px-8">{children}</div>
             </WeatherRefresh>
           </main>
         </MobileSidebarProvider>
