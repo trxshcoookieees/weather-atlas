@@ -7,7 +7,7 @@ import SidebarToggle from "@/components/ui/sidebar-toggle";
 
 export function Header() {
   return (
-    <header className="top-0 z-50 flex items-center gap-x-2 px-8 py-4 backdrop-blur-md sm:sticky sm:gap-x-8 sm:py-7 lg:justify-between">
+    <header className="top-0 z-50 flex items-center gap-x-2 px-4 py-4 pt-8 backdrop-blur-md sm:sticky sm:gap-x-8 lg:justify-between lg:px-8 lg:py-7">
       <SidebarToggle />
       <div className="relative w-full max-w-125">
         <Icon
