@@ -7,10 +7,7 @@ import type {
 } from "@/lib/weather/types";
 import { parseWeatherDateTime } from "@/lib/formatters";
 
-const FASTAPI_URL =
-  process.env.FASTAPI_URL ??
-  process.env.NEXT_PUBLIC_BACKEND_URL ??
-  "http://127.0.0.1:8000";
+const FASTAPI_URL = process.env.FASTAPI_URL ?? "http://127.0.0.1:8000";
 
 export async function getWeatherForecast(
   latitude: number,
