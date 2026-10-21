@@ -87,16 +87,16 @@ export function parseWeatherDateTime(
   const time = `${hours}:${minutes}`;
   const datePart = f.dateLong.format(date);
 
-  const timezonePart =
-    f.timeZoneName
-      .formatToParts(date)
-      .find((part) => part.type === "timeZoneName")?.value ?? "";
+  // const timezonePart =
+  //   f.timeZoneName
+  //     .formatToParts(date)
+  //     .find((part) => part.type === "timeZoneName")?.value ?? "";
 
   return {
     hours,
     minutes,
     time,
-    label: `${datePart} ${time} ${timezonePart}`,
+    label: `${datePart} ${time}`,
   };
 }
 

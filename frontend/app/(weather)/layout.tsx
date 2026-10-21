@@ -26,7 +26,7 @@ export default function WeatherLayout({ children }: LayoutProps<"/">) {
               </p>
             </div>
           </Sidebar>
-          <main className="relative mx-auto flex h-full w-full min-w-0 flex-1 flex-col overflow-y-auto">
+          <main className="mx-auto flex h-full w-full min-w-0 flex-1 flex-col overflow-x-clip">
             <Header />
             <WeatherRefresh>
               <div className="space-y-6 px-4 pb-8 lg:px-8">{children}</div>

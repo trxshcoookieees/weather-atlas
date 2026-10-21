@@ -60,7 +60,7 @@ export default async function Today(
 
   return (
     <>
-      <section className="flex items-center sm:justify-between">
+      <section className="flex items-center justify-between">
         <div className="mr-4">
           <div className="flex flex-col sm:flex-row sm:items-baseline-last">
             <span className="mr-2 text-xl font-semibold md:text-3xl">
