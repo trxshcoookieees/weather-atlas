@@ -7,7 +7,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json([]);
   }
 
-  const url = new URL("/cities", "http://127.0.0.1:8000");
+  const FASTAPI_URL = process.env.FASTAPI_URL ?? "http://127.0.0.1:8000";
+  const url = new URL("/cities", FASTAPI_URL);
   url.searchParams.set("city_name", q);
 
   const response = await fetch(url, { cache: "no-store" });

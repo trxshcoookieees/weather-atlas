@@ -1,5 +1,3 @@
-"use client";
-
 import { CitySearch } from "@/components/ui/city-search";
 import { Icon } from "@/components/ui/icon";
 import { Search } from "lucide-react";
